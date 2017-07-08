@@ -1,59 +1,73 @@
 module Main exposing (..)
+
 import Html exposing (..)
-import Html.Attributes exposing (..)
-import Html.Events exposing ( onClick )
+import Html.CssHelpers
+import Navigation exposing (Location)
+import Bootstrap.Navbar
+import Router
 
--- component import example
-import Components.Hello exposing ( hello )
+
+{ id, class, classList } =
+    Html.CssHelpers.withNamespace "ebws"
 
 
--- APP
-main : Program Never Int Msg
+type Msg
+    = OnLocationChange Location
+    | RouterMsg Router.Msg
+
+
+type alias Model =
+    { routerModel : Router.Model
+    }
+
+
+main : Program Never Model Msg
 main =
-  Html.beginnerProgram { model = model, view = view, update = update }
+    Navigation.program OnLocationChange
+        { init = init
+        , view = view
+        , update = update
+        , subscriptions = subscriptions
+        }
 
 
--- MODEL
-type alias Model = Int
+init : Navigation.Location -> ( Model, Cmd Msg )
+init location =
+    let
+        ( routerModel, routerCmd ) =
+            Router.init location
+    in
+        ( { routerModel = routerModel
+          }
+        , routerCmd |> Cmd.map RouterMsg
+        )
 
-model : number
-model = 0
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Bootstrap.Navbar.subscriptions model.routerModel.navbarState Router.NavbarMsg |> Sub.map RouterMsg
 
 
--- UPDATE
-type Msg = NoOp | Increment
-
-update : Msg -> Model -> Model
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-  case msg of
-    NoOp -> model
-    Increment -> model + 1
+    case msg of
+        OnLocationChange location ->
+            let
+                ( routerModel, routerCmd ) =
+                    Router.update (Router.OnLocationChange location) model.routerModel
+            in
+                ( { model | routerModel = routerModel }, routerCmd |> Cmd.map RouterMsg )
+
+        RouterMsg routerMsg ->
+            let
+                ( routerModel, routerCmd ) =
+                    Router.update routerMsg model.routerModel
+            in
+                ( { model | routerModel = routerModel }, routerCmd |> Cmd.map RouterMsg )
 
 
--- VIEW
--- Html is defined as: elem [ attribs ][ children ]
--- CSS can be applied via class names or inline style attrib
 view : Model -> Html Msg
 view model =
-  div [ class "container-fluid", style [("margin-top", "30px"), ( "text-align", "center" )] ][    -- inline CSS (literal)
-    div [ class "row" ][
-      div [ class "col-xs-12" ][
-        div [ class "jumbotron" ]
-          [ img [ src "static/img/2016_team.jpg", style styles.img ] []                             -- inline CSS (via var)
-          , hello model                                                                     -- ext 'hello' component (takes 'model' as arg)
-          ]
+    div []
+        [ Router.view model.routerModel |> Html.map RouterMsg
         ]
-      ]
-    ]
-  
-
-
--- CSS STYLES
-styles : { img : List ( String, String ) }
-styles =
-  {
-    img =
-      [ ( "width", "80%" )
-      , ( "border", "4px solid #337AB7")
-      ]
-  }

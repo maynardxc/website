@@ -1,7 +1,7 @@
 {
-    "version": "1.0.0",
+    "version": "0.1.0",
     "summary": "Example using `elm-webpack-loader`.",
-    "repository": "https://github.com/moarwick/elm-webpack-starter.git",
+    "repository": "https://github.com/jiwhiz/elm-bootstrap-webpack-starter.git",
     "license": "MIT",
     "source-directories": [
         "src/elm"
@@ -11,7 +11,13 @@
         "elm-lang/core": "5.0.0 <= v < 6.0.0",
         "elm-lang/html": "2.0.0 <= v < 3.0.0",
         "elm-lang/http": "1.0.0 <= v < 2.0.0",
-        "evancz/elm-markdown": "3.0.1 <= v < 4.0.0"
+        "elm-lang/navigation": "2.1.0 <= v < 3.0.0",
+        "evancz/elm-markdown": "3.0.1 <= v < 4.0.0",
+        "evancz/url-parser": "2.0.1 <= v < 3.0.0",
+        "Fresheyeball/elm-font-awesome": "2.0.2 <= v < 3.0.0",
+        "rtfeldman/elm-css": "8.1.0 <= v < 9.0.0",
+        "rtfeldman/elm-css-helpers": "2.0.1 <= v < 3.0.0",
+        "rundis/elm-bootstrap": "2.0.0 <= v < 3.0.0"
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
 }

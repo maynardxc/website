@@ -19,20 +19,19 @@ var commonConfig = {
 
   output: {
     path:       outputPath,
-    filename: `/static/js/${outputFilename}`,
-    // publicPath: '/'
+    filename:   `static/js/${outputFilename}`,
+    publicPath: '/'
   },
 
   resolve: {
-    extensions: ['', '.js', '.elm']
+    extensions: ['.js', '.elm', '.scss']
   },
 
   module: {
-    noParse: /\.elm$/,
-    loaders: [
+    rules: [
       {
-        test: /\.(eot|ttf|woff|woff2|svg)$/,
-        loader: 'file-loader'
+        test: /\.(eot|ttf|svg)$/,
+        loader:  'file-loader'
       }
     ]
   },
@@ -43,9 +42,7 @@ var commonConfig = {
       inject:   'body',
       filename: 'index.html'
     })
-  ],
-
-  postcss: [ autoprefixer( { browsers: ['last 2 versions'] } ) ],
+  ]
 
 }
 
@@ -67,20 +64,35 @@ if ( TARGET_ENV === 'development' ) {
     },
 
     module: {
-      loaders: [
+      rules: [
         {
           test:    /\.elm$/,
-          exclude: [/elm-stuff/, /node_modules/],
-          loader:  'elm-hot!elm-webpack?verbose=true&warn=true&debug=true'
+          exclude: [/elm-stuff/, /node_modules/, /Stylesheets\.elm$/],
+          use: [
+            'elm-hot-loader',
+            'elm-webpack-loader'
+          ] 
         },
         {
-          test: /\.(css|scss)$/,
-          loaders: [
+          test: /Stylesheets\.elm$/,
+          use: [
+            'style-loader',
+            'css-loader',
+            'elm-css-webpack-loader'
+          ]
+        },
+        {
+          test: /\.scss$/,
+          use: [
             'style-loader',
             'css-loader',
             'postcss-loader',
             'sass-loader'
           ]
+        },
+        {
+          test: /\.(woff|woff2)(\?v=[a-z0-9]\.[a-z0-9]\.[a-z0-9])?$/,
+          loader: 'url-loader?limit=100000'
         }
       ]
     }
@@ -97,19 +109,36 @@ if ( TARGET_ENV === 'production' ) {
     entry: entryPath,
 
     module: {
-      loaders: [
+      rules: [
         {
           test:    /\.elm$/,
-          exclude: [/elm-stuff/, /node_modules/],
-          loader:  'elm-webpack'
+          exclude: [/elm-stuff/, /node_modules/, /Stylesheets\.elm/],
+          use:     'elm-webpack-loader'
         },
         {
-          test: /\.(css|scss)$/,
-          loader: ExtractTextPlugin.extract( 'style-loader', [
-            'css-loader',
-            'postcss-loader',
-            'sass-loader'
-          ])
+          test: /Stylesheets\.elm$/,
+          use: ExtractTextPlugin.extract({
+            fallback: "style-loader",
+            use: [
+              'css-loader',
+              'elm-css-webpack-loader'
+            ]
+          })
+        },
+        {
+          test: /\.scss$/,
+          use: ExtractTextPlugin.extract({
+            fallback: 'style-loader',
+            use: [
+              'css-loader',
+              'postcss-loader',
+              'sass-loader'
+            ]
+          })
+        },
+        {
+          test: /\.(woff|woff2)(\?v=[a-z0-9]\.[a-z0-9]\.[a-z0-9])?$/,
+          loader: 'url-loader?limit=100000'
         }
       ]
     },
@@ -119,16 +148,13 @@ if ( TARGET_ENV === 'production' ) {
         {
           from: 'src/static/img/',
           to:   'static/img/'
-        },
-        {
-          from: 'src/favicon.ico'
-        },
+        }
       ]),
 
-      new webpack.optimize.OccurenceOrderPlugin(),
+      new webpack.optimize.OccurrenceOrderPlugin(),
 
       // extract CSS into a separate file
-      new ExtractTextPlugin( 'static/css/[name]-[hash].css', { allChunks: true } ),
+      new ExtractTextPlugin( 'static/styles/[name]-[hash].css'),
 
       // minify & mangle JS/CSS
       new webpack.optimize.UglifyJsPlugin({
@@ -136,7 +162,7 @@ if ( TARGET_ENV === 'production' ) {
           compressor: { warnings: false }
           // mangle:  true
       })
-    ]
+    ],
 
   });
 }
