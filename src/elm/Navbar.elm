@@ -25,11 +25,11 @@ view state currentRoute changeLocationMsgTagger navbarMsgTagger =
             |> Navbar.brand
                 [ href "/" ]
                 [ img
-                    [ src "static/img/elm-bootstrap.svg"
+                    [ src "static/img/favicon.ico"
                     , class [ MainCss.BrandLogo ]
                     ]
                     []
-                , text " Project"
+                , text " Maynard Cross Country"
                 ]
             |> Navbar.items
                 [ routeToItemLink changeLocationMsgTagger currentRoute HomeRoute Icon.home " Home"

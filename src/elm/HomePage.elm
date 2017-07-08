@@ -38,21 +38,21 @@ view : Model -> Html Msg
 view model =
     div [ class [ MainCss.Jumbotron ] ]
         [ img
-            [ src "static/img/elm.jpg"
+            [ src "static/img/2016_team.jpg"
             , MainCss.styles
                 [ Css.width (Css.pct 33)
                 , Css.border3 (Css.px 4) Css.solid (Css.hex "#337AB7")
                 ]
             ]
             []
-        , hello model.count
-        , p [] [ text ("Elm Bootstrap Webpack Starter") ]
-        , Button.button
-            [ Button.primary
-            , Button.large
-            , Button.attrs [ onClick Increment ]
-            ]
-            [ span [] []
-            , span [] [ text "FTW!" ]
-            ]
+        -- , hello model.count
+        -- , p [] [ text ("Elm Bootstrap Webpack Starter") ]
+        -- , Button.button
+        --     [ Button.primary
+        --     , Button.large
+        --     , Button.attrs [ onClick Increment ]
+        --     ]
+        --     [ span [] []
+        --     , span [] [ text "FTW!" ]
+        --     ]
         ]
