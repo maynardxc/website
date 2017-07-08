@@ -5,7 +5,10 @@ import Navigation exposing (Location)
 import Html exposing (Html, Attribute, a)
 import Bootstrap.Grid as Grid
 import Bootstrap.Navbar
-import HomePage
+import Pages.Home
+import Pages.Results
+import Pages.Schedule
+import Pages.About
 import Navbar
 import RouteHelper exposing (..)
 
@@ -14,13 +17,19 @@ type Msg
     = ChangeLocation String
     | OnLocationChange Location
     | NavbarMsg Bootstrap.Navbar.State
-    | HomePageMsg HomePage.Msg
+    | HomePageMsg Pages.Home.Msg
+    | ResultsPageMsg Pages.Results.Msg
+    | SchedulePageMsg Pages.Schedule.Msg
+    | AboutPageMsg Pages.About.Msg
 
 
 type alias Model =
     { route : Route
     , navbarState : Bootstrap.Navbar.State
-    , homePageModel : HomePage.Model
+    , homePageModel : Pages.Home.Model
+    , resultsPageModel : Pages.Results.Model
+    , schedulePageModel : Pages.Schedule.Model
+    , aboutPageModel : Pages.About.Model
     }
 
 
@@ -35,7 +44,10 @@ init location =
     in
         ( { route = currentRoute
           , navbarState = navbarState
-          , homePageModel = HomePage.init
+          , homePageModel = Pages.Home.init
+          , resultsPageModel = Pages.Results.init
+          , schedulePageModel = Pages.Schedule.init
+          , aboutPageModel = Pages.About.init
           }
         , navbarCmd
         )
@@ -60,14 +72,47 @@ update msg model =
         HomePageMsg homePageMsg ->
             updateHomePage homePageMsg model
 
+        ResultsPageMsg resultsPageMsg ->
+            updateResultsPage resultsPageMsg model
 
-updateHomePage : HomePage.Msg -> Model -> ( Model, Cmd Msg )
+        SchedulePageMsg schedulePageMsg ->
+            updateSchedulePage schedulePageMsg model
+
+        AboutPageMsg aboutPageMsg ->
+            updateAboutPage aboutPageMsg model
+
+
+updateHomePage : Pages.Home.Msg -> Model -> ( Model, Cmd Msg )
 updateHomePage msg model =
     let
         ( homePageModel, homePageCmd ) =
-            HomePage.update msg model.homePageModel
+            Pages.Home.update msg model.homePageModel
     in
         ( { model | homePageModel = homePageModel }, homePageCmd |> Cmd.map HomePageMsg )
+
+updateAboutPage : Pages.About.Msg -> Model -> ( Model, Cmd Msg )
+updateAboutPage msg model =
+    let
+        ( aboutPageModel, aboutPageCmd ) =
+            Pages.About.update msg model.aboutPageModel
+    in
+        ( { model | aboutPageModel = aboutPageModel }, aboutPageCmd |> Cmd.map AboutPageMsg )
+
+updateResultsPage : Pages.Results.Msg -> Model -> ( Model, Cmd Msg )
+updateResultsPage msg model =
+    let
+        ( resultsPageModel, resultsPageCmd ) =
+            Pages.Results.update msg model.resultsPageModel
+    in
+        ( { model | resultsPageModel = resultsPageModel }, resultsPageCmd |> Cmd.map ResultsPageMsg )
+
+updateSchedulePage : Pages.Schedule.Msg -> Model -> ( Model, Cmd Msg )
+updateSchedulePage msg model =
+    let
+        ( schedulePageModel, schedulePageCmd ) =
+            Pages.Schedule.update msg model.schedulePageModel
+    in
+        ( { model | schedulePageModel = schedulePageModel }, schedulePageCmd |> Cmd.map SchedulePageMsg )
 
 
 view : Model -> Html Msg
@@ -83,10 +128,16 @@ page model =
     Grid.container []
         [ case model.route of
             HomeRoute ->
-                Html.map HomePageMsg (HomePage.view model.homePageModel)
+                Html.map HomePageMsg (Pages.Home.view model.homePageModel)
+
+            ResultsRoute ->
+                Html.map ResultsPageMsg (Pages.Results.view model.resultsPageModel)
+
+            ScheduleRoute ->
+                Html.map SchedulePageMsg (Pages.Schedule.view model.schedulePageModel)
 
             AboutRoute ->
-                text "About"
+                Html.map AboutPageMsg (Pages.About.view model.aboutPageModel)
 
             NotFoundRoute ->
                 text "Not Found"

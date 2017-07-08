@@ -17,7 +17,7 @@ import RouteHelper exposing (..)
 
 view : State -> Route -> (String -> msg) -> (State -> msg) -> Html msg
 view state currentRoute changeLocationMsgTagger navbarMsgTagger =
-    div []
+    div [ ]
         [ Navbar.config navbarMsgTagger
             |> Navbar.withAnimation
             |> Navbar.collapseMedium
@@ -33,6 +33,8 @@ view state currentRoute changeLocationMsgTagger navbarMsgTagger =
                 ]
             |> Navbar.items
                 [ routeToItemLink changeLocationMsgTagger currentRoute HomeRoute Icon.home " Home"
+                , routeToItemLink changeLocationMsgTagger currentRoute ResultsRoute Icon.trophy " Results"
+                , routeToItemLink changeLocationMsgTagger currentRoute ScheduleRoute Icon.calendar " Schedule"
                 , routeToItemLink changeLocationMsgTagger currentRoute AboutRoute Icon.info " About"
                 , Navbar.dropdown
                     { id = "mydropdown"
