@@ -36,4 +36,7 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-  text "course maps!"
+  div [ class [ "jumbotron" ] ]
+    [
+      img [ src "static/img/coursemap_2016.jpg" ] []
+    ]

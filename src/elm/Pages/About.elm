@@ -1,4 +1,4 @@
-module Pages.About exposing (..)
+module Pages.Press exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -36,4 +36,4 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-  text "This is what it is all about"
+  text "This is what it is all a-press"

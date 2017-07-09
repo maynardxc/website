@@ -36,4 +36,13 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-  text "photo"
+  div []
+    [ img
+        [ src "static/img/2016_team.jpg"
+        , MainCss.styles
+            [ Css.width (Css.pct 80)
+            , Css.border3 (Css.px 4) Css.solid (Css.hex "#337AB7")
+            ]
+        ]
+        []
+    ]

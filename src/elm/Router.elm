@@ -10,7 +10,7 @@ import Pages.Results
 import Pages.CourseMap
 import Pages.Photos
 import Pages.Schedule
-import Pages.About
+import Pages.Press
 import Navbar
 import RouteHelper exposing (..)
 
@@ -24,7 +24,7 @@ type Msg
     | CourseMapPageMsg Pages.CourseMap.Msg
     | PhotosPageMsg Pages.Photos.Msg
     | SchedulePageMsg Pages.Schedule.Msg
-    | AboutPageMsg Pages.About.Msg
+    | PressPageMsg Pages.Press.Msg
 
 
 type alias Model =
@@ -35,7 +35,7 @@ type alias Model =
     , courseMapPageModel : Pages.CourseMap.Model
     , photosPageModel : Pages.Photos.Model
     , schedulePageModel : Pages.Schedule.Model
-    , aboutPageModel : Pages.About.Model
+    , pressPageModel : Pages.Press.Model
     }
 
 
@@ -55,7 +55,7 @@ init location =
           , courseMapPageModel = Pages.CourseMap.init
           , photosPageModel = Pages.Photos.init
           , schedulePageModel = Pages.Schedule.init
-          , aboutPageModel = Pages.About.init
+          , pressPageModel = Pages.Press.init
           }
         , navbarCmd
         )
@@ -92,8 +92,8 @@ update msg model =
         SchedulePageMsg schedulePageMsg ->
             updateSchedulePage schedulePageMsg model
 
-        AboutPageMsg aboutPageMsg ->
-            updateAboutPage aboutPageMsg model
+        PressPageMsg pressPageMsg ->
+            updatePressPage pressPageMsg model
 
 
 updateHomePage : Pages.Home.Msg -> Model -> ( Model, Cmd Msg )
@@ -104,13 +104,13 @@ updateHomePage msg model =
     in
         ( { model | homePageModel = homePageModel }, homePageCmd |> Cmd.map HomePageMsg )
 
-updateAboutPage : Pages.About.Msg -> Model -> ( Model, Cmd Msg )
-updateAboutPage msg model =
+updatePressPage : Pages.Press.Msg -> Model -> ( Model, Cmd Msg )
+updatePressPage msg model =
     let
-        ( aboutPageModel, aboutPageCmd ) =
-            Pages.About.update msg model.aboutPageModel
+        ( pressPageModel, pressPageCmd ) =
+            Pages.Press.update msg model.pressPageModel
     in
-        ( { model | aboutPageModel = aboutPageModel }, aboutPageCmd |> Cmd.map AboutPageMsg )
+        ( { model | pressPageModel = pressPageModel }, pressPageCmd |> Cmd.map PressPageMsg )
 
 updateResultsPage : Pages.Results.Msg -> Model -> ( Model, Cmd Msg )
 updateResultsPage msg model =
@@ -172,8 +172,8 @@ page model =
             ScheduleRoute ->
                 Html.map SchedulePageMsg (Pages.Schedule.view model.schedulePageModel)
 
-            AboutRoute ->
-                Html.map AboutPageMsg (Pages.About.view model.aboutPageModel)
+            PressRoute ->
+                Html.map PressPageMsg (Pages.Press.view model.pressPageModel)
 
             NotFoundRoute ->
                 text "Not Found"

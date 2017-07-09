@@ -37,18 +37,7 @@ view state currentRoute changeLocationMsgTagger navbarMsgTagger =
                 , routeToItemLink changeLocationMsgTagger currentRoute CourseMapRoute Icon.map_marker " Course Map"
                 , routeToItemLink changeLocationMsgTagger currentRoute PhotosRoute Icon.photo " Photos"
                 , routeToItemLink changeLocationMsgTagger currentRoute ScheduleRoute Icon.calendar " Schedule"
-                , routeToItemLink changeLocationMsgTagger currentRoute AboutRoute Icon.info " About"
-                -- , Navbar.dropdown
-                    -- { id = "mydropdown"
-                    -- , toggle = Navbar.dropdownToggle [] [ text "My dropdown" ]
-                    -- , items =
-                    --     [ Navbar.dropdownHeader [ text "Heading" ]
-                    --     , routeToDropdownItem changeLocationMsgTagger HomeRoute "Drop Item 1"
-                    --     , routeToDropdownItem changeLocationMsgTagger HomeRoute "Drop Item 2"
-                    --     , Navbar.dropdownDivider
-                    --     , routeToDropdownItem changeLocationMsgTagger HomeRoute "Drop Item 3"
-                    --     ]
-                    -- }
+                , routeToItemLink changeLocationMsgTagger currentRoute PressRoute Icon.newspaper_o " Press"
                 ]
             |> Navbar.view state
         ]

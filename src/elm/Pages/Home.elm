@@ -37,14 +37,16 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div [ class [ MainCss.Jumbotron ] ]
-        [ img
-            [ src "static/img/2016_team.jpg"
-            , MainCss.styles
-                [ Css.width (Css.pct 33)
-                , Css.border3 (Css.px 4) Css.solid (Css.hex "#337AB7")
-                ]
+        [ blockquote []
+          [ h3 []
+            [ text("Cross country is...free running on open-air courses, over dirt "
+                ++ "and grass and bridges. It is challenging and exhilarating, "
+                ++ "both easy and hard. Cross country is teamwork and individual "
+                ++ "accomplishments rolled into one. It is getting lost and finding "
+                ++ "your way. Cross country is friends bound by sweat, tears, and cheers.")
             ]
-            []
+          , footer [] [ text "Coach Karen" ]
+          ]
         -- , hello model.count
         -- , p [] [ text ("Elm Bootstrap Webpack Starter") ]
         -- , Button.button
