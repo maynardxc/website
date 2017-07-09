@@ -7,6 +7,8 @@ import Bootstrap.Grid as Grid
 import Bootstrap.Navbar
 import Pages.Home
 import Pages.Results
+import Pages.CourseMap
+import Pages.Photos
 import Pages.Schedule
 import Pages.About
 import Navbar
@@ -19,6 +21,8 @@ type Msg
     | NavbarMsg Bootstrap.Navbar.State
     | HomePageMsg Pages.Home.Msg
     | ResultsPageMsg Pages.Results.Msg
+    | CourseMapPageMsg Pages.CourseMap.Msg
+    | PhotosPageMsg Pages.Photos.Msg
     | SchedulePageMsg Pages.Schedule.Msg
     | AboutPageMsg Pages.About.Msg
 
@@ -28,6 +32,8 @@ type alias Model =
     , navbarState : Bootstrap.Navbar.State
     , homePageModel : Pages.Home.Model
     , resultsPageModel : Pages.Results.Model
+    , courseMapPageModel : Pages.CourseMap.Model
+    , photosPageModel : Pages.Photos.Model
     , schedulePageModel : Pages.Schedule.Model
     , aboutPageModel : Pages.About.Model
     }
@@ -46,6 +52,8 @@ init location =
           , navbarState = navbarState
           , homePageModel = Pages.Home.init
           , resultsPageModel = Pages.Results.init
+          , courseMapPageModel = Pages.CourseMap.init
+          , photosPageModel = Pages.Photos.init
           , schedulePageModel = Pages.Schedule.init
           , aboutPageModel = Pages.About.init
           }
@@ -74,6 +82,12 @@ update msg model =
 
         ResultsPageMsg resultsPageMsg ->
             updateResultsPage resultsPageMsg model
+
+        CourseMapPageMsg courseMapPageMsg ->
+            updateCourseMapPage courseMapPageMsg model
+
+        PhotosPageMsg photosPageMsg ->
+            updatePhotosPage photosPageMsg model
 
         SchedulePageMsg schedulePageMsg ->
             updateSchedulePage schedulePageMsg model
@@ -106,6 +120,22 @@ updateResultsPage msg model =
     in
         ( { model | resultsPageModel = resultsPageModel }, resultsPageCmd |> Cmd.map ResultsPageMsg )
 
+updateCourseMapPage : Pages.CourseMap.Msg -> Model -> ( Model, Cmd Msg )
+updateCourseMapPage msg model =
+    let
+        ( courseMapPageModel, courseMapPageCmd ) =
+            Pages.CourseMap.update msg model.courseMapPageModel
+    in
+        ( { model | courseMapPageModel = courseMapPageModel }, courseMapPageCmd |> Cmd.map CourseMapPageMsg )
+
+updatePhotosPage : Pages.Photos.Msg -> Model -> ( Model, Cmd Msg )
+updatePhotosPage msg model =
+    let
+        ( photosPageModel, photosPageCmd ) =
+            Pages.Photos.update msg model.photosPageModel
+    in
+        ( { model | photosPageModel = photosPageModel }, photosPageCmd |> Cmd.map PhotosPageMsg )
+
 updateSchedulePage : Pages.Schedule.Msg -> Model -> ( Model, Cmd Msg )
 updateSchedulePage msg model =
     let
@@ -132,6 +162,12 @@ page model =
 
             ResultsRoute ->
                 Html.map ResultsPageMsg (Pages.Results.view model.resultsPageModel)
+
+            CourseMapRoute ->
+                Html.map CourseMapPageMsg (Pages.CourseMap.view model.courseMapPageModel)
+
+            PhotosRoute ->
+                Html.map PhotosPageMsg (Pages.Photos.view model.photosPageModel)
 
             ScheduleRoute ->
                 Html.map SchedulePageMsg (Pages.Schedule.view model.schedulePageModel)

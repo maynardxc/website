@@ -15,6 +15,8 @@ import Json.Decode as Json
 type Route
     = HomeRoute
     | ResultsRoute
+    | CourseMapRoute
+    | PhotosRoute
     | ScheduleRoute
     | AboutRoute
     | NotFoundRoute
@@ -25,6 +27,8 @@ routeParser =
     UrlParser.oneOf
         [ UrlParser.map HomeRoute (UrlParser.s "")
         , UrlParser.map ResultsRoute (UrlParser.s "results")
+        , UrlParser.map CourseMapRoute (UrlParser.s "coursemap")
+        , UrlParser.map PhotosRoute (UrlParser.s "photos")
         , UrlParser.map ScheduleRoute (UrlParser.s "schedule")
         , UrlParser.map AboutRoute (UrlParser.s "about")
         ]
@@ -48,6 +52,12 @@ encode route =
 
         ResultsRoute ->
             "/results"
+
+        CourseMapRoute ->
+            "/coursemap"
+
+        PhotosRoute ->
+            "/photos"
 
         ScheduleRoute ->
             "/schedule"

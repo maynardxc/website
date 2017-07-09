@@ -34,30 +34,21 @@ view state currentRoute changeLocationMsgTagger navbarMsgTagger =
             |> Navbar.items
                 [ routeToItemLink changeLocationMsgTagger currentRoute HomeRoute Icon.home " Home"
                 , routeToItemLink changeLocationMsgTagger currentRoute ResultsRoute Icon.trophy " Results"
+                , routeToItemLink changeLocationMsgTagger currentRoute CourseMapRoute Icon.map_marker " Course Map"
+                , routeToItemLink changeLocationMsgTagger currentRoute PhotosRoute Icon.photo " Photos"
                 , routeToItemLink changeLocationMsgTagger currentRoute ScheduleRoute Icon.calendar " Schedule"
                 , routeToItemLink changeLocationMsgTagger currentRoute AboutRoute Icon.info " About"
-                , Navbar.dropdown
-                    { id = "mydropdown"
-                    , toggle = Navbar.dropdownToggle [] [ text "My dropdown" ]
-                    , items =
-                        [ Navbar.dropdownHeader [ text "Heading" ]
-                        , routeToDropdownItem changeLocationMsgTagger HomeRoute "Drop Item 1"
-                        , routeToDropdownItem changeLocationMsgTagger HomeRoute "Drop Item 2"
-                        , Navbar.dropdownDivider
-                        , routeToDropdownItem changeLocationMsgTagger HomeRoute "Drop Item 3"
-                        ]
-                    }
-                ]
-            |> Navbar.customItems
-                [ Navbar.formItem []
-                    [ Input.text [ Input.attrs <| [ placeholder "enter" ] ]
-                    , Button.button
-                        [ Button.outlineSuccess
-                        , Button.attrs [ Html.Attributes.class "ml-sm-2" ]
-                        ]
-                        [ text "Search" ]
-                    ]
-                , Navbar.textItem [ Html.Attributes.class "muted ml-sm-2" ] [ text "Text" ]
+                -- , Navbar.dropdown
+                    -- { id = "mydropdown"
+                    -- , toggle = Navbar.dropdownToggle [] [ text "My dropdown" ]
+                    -- , items =
+                    --     [ Navbar.dropdownHeader [ text "Heading" ]
+                    --     , routeToDropdownItem changeLocationMsgTagger HomeRoute "Drop Item 1"
+                    --     , routeToDropdownItem changeLocationMsgTagger HomeRoute "Drop Item 2"
+                    --     , Navbar.dropdownDivider
+                    --     , routeToDropdownItem changeLocationMsgTagger HomeRoute "Drop Item 3"
+                    --     ]
+                    -- }
                 ]
             |> Navbar.view state
         ]
