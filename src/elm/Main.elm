@@ -4,6 +4,7 @@ import Html exposing (..)
 import Html.CssHelpers
 import Navigation exposing (Location)
 import Bootstrap.Navbar
+import Bootstrap.Grid
 import Router
 
 
@@ -68,6 +69,8 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ Router.view model.routerModel |> Html.map RouterMsg
-        ]
+  Bootstrap.Grid.containerFluid
+    []
+    [ div [ ]
+      [ Router.view model.routerModel |> Html.map RouterMsg ]
+    ]
