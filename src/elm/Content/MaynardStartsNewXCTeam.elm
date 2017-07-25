@@ -23,4 +23,4 @@ card =
         ]
       ]
     |> Card.footer []
-      [ small [ class "text-muted" ] [ text "2017-07-25" ] ]
+      [ small [ class "text-muted" ] [ text "2016-06-26" ] ]
