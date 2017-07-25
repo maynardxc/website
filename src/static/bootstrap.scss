@@ -5,7 +5,7 @@
 // without modifying source files.
 
 // Reassign color vars to semantic color scheme
-$brand-primary:   rgb(86,63,122);
+$brand-primary:  #dac59b;
 
 $navbar-light-color:                rgba($brand-primary,.75);
 $navbar-light-hover-color:          rgba($brand-primary,1.25);
@@ -16,18 +16,26 @@ $navbar-light-active-color:         rgba($brand-primary,1);
 $fa-font-path: "~font-awesome/fonts";
 @import '~font-awesome/scss/font-awesome.scss';
 
+.navbar {
+  background-color: #332000;
+}
+
+.card-columns {
+  column-count: 3;
+}
+
 .card.press {
-  background-color: #129843;
+  background-color: #8f7341;
 }
 
 .card.announcement {
-  background-color: #8701b3;
+  background-color: #b58b37;
 }
 
 .card.quotes {
-  background-color: #f1c365;
+  background-color: #ada882;
 }
 
 .card.photo {
-  background-color: #040802;
+  background-color: #332000;
 }

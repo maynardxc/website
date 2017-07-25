@@ -155,7 +155,7 @@ view model =
 
 page : Model -> Html Msg
 page model =
-    Grid.container []
+    Grid.containerFluid []
         [ case model.route of
             HomeRoute ->
                 Html.map HomePageMsg (Pages.Home.view model.homePageModel)
