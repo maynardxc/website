@@ -9,7 +9,7 @@ import Bootstrap.Card as Card
 
 card : Card.Config a
 card =
-  Card.config [ Card.inverted Color.orange ]
+  Card.config [ Card.attrs [ class "quotes" ] ]
     |> Card.headerH3 [] [ text "Cross Country is..." ]
     |> Card.block []
       [ Card.text [] [ crossCountryQuote

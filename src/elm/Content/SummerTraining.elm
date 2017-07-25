@@ -8,7 +8,7 @@ import Bootstrap.Card as Card
 
 card : Card.Config a
 card =
-  Card.config [ Card.inverted Color.orange ]
+  Card.config [ Card.attrs [ class "announcement" ] ]
     |> Card.headerH3 [] [ text "Summer Training" ]
     |> Card.block []
       [ Card.text [] [ cardBody ] ]

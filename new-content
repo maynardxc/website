@@ -1,0 +1,31 @@
+#! /bin/bash
+
+CONTENT_SRC=src/elm/Content
+CONTENT_NAME=$1
+CONTENT_FILE=$CONTENT_SRC/$CONTENT_NAME.elm
+TEMPLATE_FILE=$CONTENT_SRC/Template.elm
+
+if [ -z $CONTENT_NAME ]; then
+  echo "You must specify a name for the content"
+  exit 1
+fi
+
+if [ -f $CONTENT_FILE ]; then
+  echo "$CONTENT_NAME already exists: $CONTENT_FILE"
+  exit 2
+fi
+
+echo "Creating content for $CONTENT_NAME..."
+
+echo "   creating $CONTENT_FILE"
+cp $TEMPLATE_FILE $CONTENT_FILE
+
+SED_EVAL="s/Template/$CONTENT_NAME/g"
+sed -i -e $SED_EVAL $CONTENT_FILE
+
+SED_EVAL="s/<content>/$CONTENT_NAME/g"
+sed -i -e $SED_EVAL $CONTENT_FILE
+
+DATE=`date +%Y-%m-%d`
+SED_EVAL="s/<date>/$DATE/g"
+sed -i -e $SED_EVAL $CONTENT_FILE

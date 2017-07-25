@@ -9,6 +9,7 @@ import Content.CrossCountryIs
 import Content.SummerTraining
 import Content.SummerRunningOpportunities
 import Content.TeamPhoto
+import Content.MaynardStartsNewXCTeam
 
 cards =
   [ Card.columns
@@ -16,5 +17,6 @@ cards =
     , Content.SummerTraining.card
     , Content.TeamPhoto.card
     , Content.CrossCountryIs.card
+    , Content.MaynardStartsNewXCTeam.card
     ]
   ]

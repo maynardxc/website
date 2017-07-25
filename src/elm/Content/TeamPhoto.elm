@@ -8,7 +8,7 @@ import Bootstrap.Card as Card
 
 card : Card.Config a
 card =
-  Card.config [ Card.attrs [ class "w-100" ] ]
+  Card.config [ Card.attrs [ class "photo" ] ]
     |> Card.block []
       [ Card.text [] [ img
         [ src "static/img/2016_team.jpg"
