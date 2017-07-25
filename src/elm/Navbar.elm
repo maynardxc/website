@@ -25,7 +25,7 @@ view state currentRoute changeLocationMsgTagger navbarMsgTagger =
             |> Navbar.brand
                 [ href "/" ]
                 [ img
-                    [ src "static/img/favicon.ico"
+                    [ src "static/img/tiger_blink.gif"
                     , class [ MainCss.BrandLogo ]
                     ]
                     []

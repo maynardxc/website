@@ -27,15 +27,31 @@ $fa-font-path: "~font-awesome/fonts";
 .card.press {
   background-color: #8f7341;
 }
+.card.press .card-header {
+  background-color: #8f7341;
+  background: linear-gradient( rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1) );
+}
 
 .card.announcement {
   background-color: #b58b37;
+}
+.card.announcement .card-header {
+  background-color: #b58b37;
+  background: linear-gradient( rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1) );
 }
 
 .card.quotes {
   background-color: #ada882;
 }
+.card.quotes .card-header {
+  background-color: #ada882;
+  background: linear-gradient( rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1) );
+}
 
 .card.photo {
   background-color: #332000;
+}
+.card.photo .card-header {
+  background-color: #332000;
+  background: linear-gradient( rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1) );
 }

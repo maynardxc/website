@@ -29,7 +29,7 @@ css =
             [ textAlign center
             ]
         , class BrandLogo
-            [ width (px 30)
+            [ width (px 80)
             ]
         ]
 

@@ -15,8 +15,6 @@ card =
       [ Card.text [] [ crossCountryQuote
       , p [ class "text-muted" ] [ text "Coach Karen" ]
       ] ]
-    -- |> Card.footer []
-    --   [ small [ class "text-muted" ] [ text "Coach Karen" ] ]
 
 crossCountryQuote : Html a
 crossCountryQuote =

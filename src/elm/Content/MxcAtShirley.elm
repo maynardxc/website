@@ -9,7 +9,7 @@ import Bootstrap.Card as Card
 card : Card.Config a
 card =
   Card.config [ Card.attrs [ class "press" ] ]
-    |> Card.headerH3 [] [ text "Press" ]
+    |> Card.headerH3 [] [ text "Beacon-Villager, 2016-11-09" ]
     |> Card.block []
       [ Card.text []
         [ text ("Maynard High School’s cross-country team showed talent and strength on "
@@ -23,5 +23,3 @@ card =
           [text "Beacon-Villager" ]
         ]
       ]
-    |> Card.footer []
-      [ small [ class "text-muted" ] [ text "2016-11-09" ] ]
