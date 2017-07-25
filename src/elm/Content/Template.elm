@@ -10,6 +10,7 @@ card : Card.Config a
 card =
   Card.config [ Card.attrs [] ]
     |> Card.block []
+    |> Card.headerH3 [] [ text "Announcement" ]
       [ Card.text []
         [ text "<content>"
         ]

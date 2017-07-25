@@ -9,7 +9,7 @@ import Bootstrap.Card as Card
 card : Card.Config a
 card =
   Card.config [ Card.attrs [ class "announcement" ] ]
-    |> Card.headerH3 [] [ text "Summer Training" ]
+    |> Card.headerH3 [] [ text "Announcement" ]
     |> Card.block []
       [ Card.text [] [ cardBody ] ]
     -- |> Card.footer []
@@ -18,7 +18,8 @@ card =
 cardBody : Html a
 cardBody =
   div []
-    [ p [] [ text "Regardless of the parent led runs/workouts, each of you should be doing the following:" ]
+    [ h4 [] [ text "Summer Training" ]
+    , p [] [ text "Regardless of the parent led runs/workouts, each of you should be doing the following:" ]
     , ul []
       [ li [] [ text "Running 3-5 days a week" ]
       , li [] [ text "Varying the intensity of those runs (some days easy/like jog, other days throw in some higher intensity sessions in the middle of your runs" ]

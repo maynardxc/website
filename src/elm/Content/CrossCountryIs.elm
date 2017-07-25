@@ -10,7 +10,7 @@ import Bootstrap.Card as Card
 card : Card.Config a
 card =
   Card.config [ Card.attrs [ class "quotes" ] ]
-    |> Card.headerH3 [] [ text "Cross Country is..." ]
+    |> Card.headerH3 [] [ text "Quote" ]
     |> Card.block []
       [ Card.text [] [ crossCountryQuote
       , p [ class "text-muted" ] [ text "Coach Karen" ]
@@ -20,7 +20,7 @@ card =
 
 crossCountryQuote : Html a
 crossCountryQuote =
-  text("free running on open-air courses, over dirt "
+  text("Cross Country is...free running on open-air courses, over dirt "
     ++ "and grass and bridges. It is challenging and exhilarating, "
     ++ "both easy and hard. Cross country is teamwork and individual "
     ++ "accomplishments rolled into one. It is getting lost and finding "

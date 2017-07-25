@@ -9,6 +9,7 @@ import Bootstrap.Card as Card
 card : Card.Config a
 card =
   Card.config [ Card.attrs [ class "press" ] ]
+    |> Card.headerH3 [] [ text "Press" ]
     |> Card.block []
       [ Card.text []
         [ text ("Maynard’s been able to offer several fall sports to our students to date, "

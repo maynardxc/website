@@ -10,15 +10,11 @@ import Bootstrap.Card as Card
 card : Card.Config a
 card =
   Card.config [ Card.attrs [ class "announcement" ] ]
-    |> Card.headerH3 [] [ cardTitle ]
+    |> Card.headerH3 [] [ text "Announcement" ]
     |> Card.block []
       [ Card.text [] [ cardBody ] ]
     |> Card.footer []
       [ small [ class "text-muted" ] [ text "2017-07-24" ] ]
-
-cardTitle : Html a
-cardTitle =
-  text "Summer Running Opportunities"
 
 cardBody : Html a
 cardBody =
