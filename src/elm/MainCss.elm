@@ -23,7 +23,6 @@ css =
         [ body
             [ minHeight (Css.rem 75)
             , paddingTop (Css.rem 4.5)
-            -- , property "background" "linear-gradient( rgba(173, 168, 130, 1.00), rgba(51, 32, 0, 0.75) ), url(\"/static/img/tiger-pattern-seamless-large.jpg\")"
             , property "background" "linear-gradient( rgba(51, 32, 0, 0.75), rgba(173, 168, 130, 1.00) ), url(\"/static/img/tiger-pattern-seamless-large.jpg\")"
             ]
         , class Jumbotron
