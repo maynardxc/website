@@ -6,15 +6,15 @@ import Html.Attributes exposing (..)
 import Bootstrap.Card as Card
 
 import Content.CrossCountryIs
+import Content.SummerTraining
+import Content.SummerRunningOpportunities
+import Content.TeamPhoto
 
 cards =
-  [ Card.deck
-    [ Content.CrossCountryIs.card
-    , Content.CrossCountryIs.card
-    ]
-  , Card.deck
-    [ Content.CrossCountryIs.card
-    , Content.CrossCountryIs.card
+  [ Card.columns
+    [ Content.SummerRunningOpportunities.card
+    , Content.SummerTraining.card
+    , Content.TeamPhoto.card
     , Content.CrossCountryIs.card
     ]
   ]

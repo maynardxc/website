@@ -3,17 +3,20 @@ module Content.CrossCountryIs exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 
+import Color
 import Bootstrap.Card as Card
 
 
 card : Card.Config a
 card =
-  Card.config []
+  Card.config [ Card.inverted Color.orange ]
     |> Card.headerH3 [] [ text "Cross Country is..." ]
     |> Card.block []
-      [ Card.text [] [ crossCountryQuote ] ]
-    |> Card.footer []
-      [ small [ class "text-muted" ] [ text "Coach Karen" ] ]
+      [ Card.text [] [ crossCountryQuote
+      , p [ class "text-muted" ] [ text "Coach Karen" ]
+      ] ]
+    -- |> Card.footer []
+    --   [ small [ class "text-muted" ] [ text "Coach Karen" ] ]
 
 crossCountryQuote : Html a
 crossCountryQuote =
