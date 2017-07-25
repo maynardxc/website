@@ -34,10 +34,10 @@ view state currentRoute changeLocationMsgTagger navbarMsgTagger =
             |> Navbar.items
                 [ routeToItemLink changeLocationMsgTagger currentRoute HomeRoute Icon.home " Home"
                 , routeToItemLink changeLocationMsgTagger currentRoute ResultsRoute Icon.trophy " Results"
-                , routeToItemLink changeLocationMsgTagger currentRoute CourseMapRoute Icon.map_marker " Course Map"
-                , routeToItemLink changeLocationMsgTagger currentRoute PhotosRoute Icon.photo " Photos"
                 , routeToItemLink changeLocationMsgTagger currentRoute ScheduleRoute Icon.calendar " Schedule"
-                , routeToItemLink changeLocationMsgTagger currentRoute PressRoute Icon.newspaper_o " Press"
+                , routeToItemLink changeLocationMsgTagger currentRoute CourseMapRoute Icon.map_marker " Course Map"
+                -- , routeToItemLink changeLocationMsgTagger currentRoute PhotosRoute Icon.photo " Photos"
+                -- , routeToItemLink changeLocationMsgTagger currentRoute PressRoute Icon.newspaper_o " Press"
                 ]
             |> Navbar.view state
         ]
