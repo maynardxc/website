@@ -10,10 +10,10 @@ import Bootstrap.Card as Card
 card : Card.Config a
 card =
   Card.config [ Card.attrs [ class "quotes" ] ]
-    |> Card.headerH3 [] [ text "Quote" ]
+    -- |> Card.headerH3 [] [ text "Quote" ]
     |> Card.block []
       [ Card.text [] [ crossCountryQuote
-      , p [ class "text-muted" ] [ text "Coach Karen" ]
+      , p [] [ small [] [ text "Coach Karen" ] ]
       ] ]
 
 crossCountryQuote : Html a
