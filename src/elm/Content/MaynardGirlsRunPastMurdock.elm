@@ -14,7 +14,7 @@ card =
       [ Card.text []
         [ a
           [ href "http://maynard.wickedlocal.com/sports/20161014/maynard-girls-run-past-murdock" ]
-          [ text ("Grace Charron and Aurora Estaeroola finished third and fourth as the Maynard girls "
+          [ text ("Grace Charron and Aurora Estabrook finished third and fourth as the Maynard girls "
               ++ "cross-country team defeated Murdock in a tri-meet with Bromfield on Oct. 13.")
           ]
         ]
