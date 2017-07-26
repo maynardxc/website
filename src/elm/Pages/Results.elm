@@ -31,9 +31,9 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-  div []
-    [ table [ class "table table-striped" ]
-      [ thead [ class "thead-inverse" ]
+  div [ class "container" ]
+    [ table [ class "table table-inverse" ]
+      [ thead []
         [ tr []
           [ th [] [ text "Date" ]
           , th [] [ text "Location" ]
