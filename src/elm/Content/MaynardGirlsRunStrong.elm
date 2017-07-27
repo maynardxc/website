@@ -16,7 +16,7 @@ card =
           [ href "http://maynard.wickedlocal.com/sports/20161101/maynard-girls-run-strong" ]
           [ text "Maynard girls run strong..."
           , img
-            [ src "http://maynard.wickedlocal.com/storyimage/WL/20161101/SPORTS/161109355/AR/0/AR-161109355.jpg&MaxH=800&MaxW=800"
+            [ src "static/img/maynard_runs_strong.jpg"
             , alt ("Maynard’s girls [...] made great strides this season and a group "
                 ++ "that featured a host of middle school runners did well enough to place "
                 ++ "second in Saturday’s Mid Wach D championships Holdenwood.")
