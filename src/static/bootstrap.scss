@@ -24,6 +24,17 @@ $fa-font-path: "~font-awesome/fonts";
   column-count: 3;
 }
 
+@media (max-width: 800px) {
+  .card-columns {
+    column-count: 2;
+  }
+}
+@media (max-width: 500px) {
+  .card-columns {
+    column-count: 1;
+  }
+}
+
 .card.press {
   background-color: #8f7341;
 }
