@@ -1,6 +1,8 @@
 module Router exposing (..)
 
 import Html exposing (..)
+import Html.Attributes exposing (..)
+
 import Navigation exposing (Location)
 import Html exposing (Html, Attribute, a)
 import Bootstrap.Grid as Grid
@@ -8,11 +10,14 @@ import Bootstrap.Navbar
 import Pages.Home
 import Pages.Results
 import Pages.CourseMap
+import Pages.CourseMap2016
 import Pages.Photos
 import Pages.Schedule
 import Pages.Press
 import Navbar
 import RouteHelper exposing (..)
+
+import Bootstrap.Card as Card
 
 
 type Msg
@@ -22,6 +27,7 @@ type Msg
     | HomePageMsg Pages.Home.Msg
     | ResultsPageMsg Pages.Results.Msg
     | CourseMapPageMsg Pages.CourseMap.Msg
+    | CourseMap2016PageMsg Pages.CourseMap2016.Msg
     | PhotosPageMsg Pages.Photos.Msg
     | SchedulePageMsg Pages.Schedule.Msg
     | PressPageMsg Pages.Press.Msg
@@ -33,6 +39,7 @@ type alias Model =
     , homePageModel : Pages.Home.Model
     , resultsPageModel : Pages.Results.Model
     , courseMapPageModel : Pages.CourseMap.Model
+    , courseMap2016PageModel : Pages.CourseMap2016.Model
     , photosPageModel : Pages.Photos.Model
     , schedulePageModel : Pages.Schedule.Model
     , pressPageModel : Pages.Press.Model
@@ -53,6 +60,7 @@ init location =
           , homePageModel = Pages.Home.init
           , resultsPageModel = Pages.Results.init
           , courseMapPageModel = Pages.CourseMap.init
+          , courseMap2016PageModel = Pages.CourseMap2016.init
           , photosPageModel = Pages.Photos.init
           , schedulePageModel = Pages.Schedule.init
           , pressPageModel = Pages.Press.init
@@ -85,6 +93,9 @@ update msg model =
 
         CourseMapPageMsg courseMapPageMsg ->
             updateCourseMapPage courseMapPageMsg model
+
+        CourseMap2016PageMsg courseMap2016PageMsg ->
+            updateCourseMap2016Page courseMap2016PageMsg model
 
         PhotosPageMsg photosPageMsg ->
             updatePhotosPage photosPageMsg model
@@ -128,6 +139,14 @@ updateCourseMapPage msg model =
     in
         ( { model | courseMapPageModel = courseMapPageModel }, courseMapPageCmd |> Cmd.map CourseMapPageMsg )
 
+updateCourseMap2016Page : Pages.CourseMap2016.Msg -> Model -> ( Model, Cmd Msg )
+updateCourseMap2016Page msg model =
+    let
+        ( courseMap2016PageModel, courseMap2016PageCmd ) =
+            Pages.CourseMap2016.update msg model.courseMap2016PageModel
+    in
+        ( { model | courseMap2016PageModel = courseMap2016PageModel }, courseMap2016PageCmd |> Cmd.map CourseMap2016PageMsg )
+
 updatePhotosPage : Pages.Photos.Msg -> Model -> ( Model, Cmd Msg )
 updatePhotosPage msg model =
     let
@@ -166,6 +185,9 @@ page model =
             CourseMapRoute ->
                 Html.map CourseMapPageMsg (Pages.CourseMap.view model.courseMapPageModel)
 
+            CourseMap2016Route ->
+                Html.map CourseMap2016PageMsg (Pages.CourseMap2016.view model.courseMap2016PageModel)
+
             PhotosRoute ->
                 Html.map PhotosPageMsg (Pages.Photos.view model.photosPageModel)
 
@@ -176,5 +198,17 @@ page model =
                 Html.map PressPageMsg (Pages.Press.view model.pressPageModel)
 
             NotFoundRoute ->
-                text "Not Found"
+                  div [ class "container text-center" ]
+                    [ Card.config [ Card.info, Card.attrs [] ]
+                      |> Card.block []
+                        [ Card.text []
+                          [img
+                            [ src "static/img/not_found_tiger.png"
+                            , alt "NOT FOUND"
+                            , style [("max-width", "100%"), ("max-height", "100%")]
+                            ] []
+                          ]
+                        ]
+                      |> Card.view
+                    ]
         ]

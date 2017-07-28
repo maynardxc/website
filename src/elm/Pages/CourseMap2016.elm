@@ -1,4 +1,4 @@
-module Pages.CourseMap exposing (..)
+module Pages.CourseMap2016 exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -30,23 +30,14 @@ view model =
   div [ class "container text-center" ]
     [ Card.config [ Card.info, Card.attrs [] ]
       |> Card.block []
-        [ Card.titleH3 [] [ text "New course for 2017!" ]
+        [ Card.titleH3 [] [ text "This course was used during 2016." ]
         , Card.text []
           [img
-            [ src "static/img/2017_coursemap.jpg"
+            [ src "static/img/coursemap_2016.jpg"
             , alt "2016 team"
             , style [("max-width", "100%"), ("max-height", "100%")]
             ] []
           ]
         ]
-      |> Card.footer []
-        [ small [ class "text-muted" ] [ a [ href "coursemap2016" ] [ text "See the previous course" ] ] ]
       |> Card.view
     ]
-    -- [ div [ class "jumbotron" ] [ text "2017 course" ]
-    -- , img
-    --   [ class "img-responsive center-block"
-    --   , src "static/img/2017_coursemap.jpg"
-    --   ]
-    --   []
-    -- ]

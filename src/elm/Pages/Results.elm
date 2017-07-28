@@ -154,7 +154,7 @@ view model =
 viewResultSet : ResultSet -> Html Msg
 viewResultSet rs =
   div [ class "container" ]
-    [ table [ class "table table-inverse" ]
+    [ table [ class "table table-hover" ]
       [ thead [] [ tr [] [ td [ rowspan 8 ] [ text rs.name ] ] ]
       , tbody [] (List.map viewResults rs.results)
       ]
