@@ -25,53 +25,38 @@ type Route
 
 routeParser : Parser (Route -> a) a
 routeParser =
-    UrlParser.oneOf
-        [ UrlParser.map HomeRoute (UrlParser.s "")
-        , UrlParser.map ResultsRoute (UrlParser.s "results")
-        , UrlParser.map CourseMapRoute (UrlParser.s "coursemap")
-        , UrlParser.map CourseMap2016Route (UrlParser.s "coursemap2016")
-        , UrlParser.map PhotosRoute (UrlParser.s "photos")
-        , UrlParser.map ScheduleRoute (UrlParser.s "schedule")
-        , UrlParser.map PressRoute (UrlParser.s "press")
-        ]
+  UrlParser.oneOf
+    [ UrlParser.map HomeRoute (UrlParser.s "")
+    , UrlParser.map ResultsRoute (UrlParser.s "results")
+    , UrlParser.map CourseMapRoute (UrlParser.s "coursemap")
+    , UrlParser.map CourseMap2016Route (UrlParser.s "coursemap2016")
+    , UrlParser.map PhotosRoute (UrlParser.s "photos")
+    , UrlParser.map ScheduleRoute (UrlParser.s "schedule")
+    , UrlParser.map PressRoute (UrlParser.s "press")
+    ]
 
 
 parseLocation : Navigation.Location -> Route
 parseLocation location =
-    case (UrlParser.parsePath routeParser location) of
-        Just route ->
-            route
-
-        Nothing ->
-            NotFoundRoute
+  case (UrlParser.parseHash routeParser location) of
+    Just route -> route
+    Nothing -> HomeRoute
 
 
 encode : Route -> String
 encode route =
-    case route of
-        HomeRoute ->
-            "/"
-
-        ResultsRoute ->
-            "/results"
-
-        CourseMapRoute ->
-            "/coursemap"
-
-        CourseMap2016Route ->
-            "/coursemap2016"
-
-        PhotosRoute ->
-            "/photos"
-
-        ScheduleRoute ->
-            "/schedule"
-
-        PressRoute ->
-            "/press"
-
-        NotFoundRoute ->
-            "/"
+  let
+    path = case route of
+      HomeRoute -> ""
+      ResultsRoute -> "results"
+      CourseMapRoute -> "coursemap"
+      CourseMap2016Route -> "coursemap2016"
+      PhotosRoute -> "photos"
+      ScheduleRoute -> "schedule"
+      PressRoute -> "press"
+      NotFoundRoute -> ""
+  in
+    "#/" ++ path
 
 
 navigate : Route -> Cmd msg
@@ -86,28 +71,28 @@ linkTo route attrs content =
 
 linkAttrs : Route -> List (Attribute msg)
 linkAttrs route =
-    let
-        path =
-            encode route
-    in
-        [ href path
-        , attribute "data-navigate" path
-        ]
+  let
+    path =
+      encode route
+  in
+    [ href path
+    , attribute "data-navigate" path
+    ]
 
 
 catchNavigationClicks : msg -> Attribute msg
 catchNavigationClicks message =
-    onWithOptions "click"
-        { stopPropagation = True
-        , preventDefault = True
-        }
-        (Json.succeed message)
+  onWithOptions "click"
+    { stopPropagation = True
+    , preventDefault = True
+    }
+    (Json.succeed message)
 
 
 pathDecoder : Json.Decoder String
 pathDecoder =
-    Json.oneOf
-        [ Json.at [ "data-navigate" ] Json.string
-        , Json.at [ "parentElement" ] (Json.lazy (\_ -> pathDecoder))
-        , Json.fail "no path found for click"
-        ]
+  Json.oneOf
+    [ Json.at [ "data-navigate" ] Json.string
+    , Json.at [ "parentElement" ] (Json.lazy (\_ -> pathDecoder))
+    , Json.fail "no path found for click"
+    ]

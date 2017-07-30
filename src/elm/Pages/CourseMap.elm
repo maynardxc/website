@@ -40,7 +40,7 @@ view model =
           ]
         ]
       |> Card.footer []
-        [ small [ class "text-muted" ] [ a [ href "coursemap2016" ] [ text "See the previous course" ] ] ]
+        [ small [ class "text-muted" ] [ a [ href "/#/coursemap2016" ] [ text "See the previous course" ] ] ]
       |> Card.view
     ]
     -- [ div [ class "jumbotron" ] [ text "2017 course" ]
