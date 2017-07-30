@@ -121,7 +121,7 @@ view model =
   div [ class "container" ]
     [ table [ class "table table-hover" ]
       [ thead []
-        [ tr [] [ td [ colspan 3 ] [ h4 [] [ text "2017 Schedule" ] ] ] ]
+        [ tr [] [ th [ colspan 3 ] [ h3 [] [ text "2017 Schedule" ] ] ] ]
       , tbody [] (List.map viewSchedule model.schedule)
       ]
     ]

@@ -49,7 +49,7 @@ rs2017 =
 
 rs2016 : ResultSet
 rs2016 =
-  { name = "2016"
+  { name = "2016 Results"
   , results =
       [ { date = "Nov. 12 2016"
         , location = "District Meet (Gardner)"
@@ -82,32 +82,32 @@ rs2016 =
         , boysResults = "static/img/results/20161025-Boys vs Littleton @ Littleton.jpg"
         }
       , { date = "Oct. 13 2016"
-        , location = "Bromfield"
+        , location = "Bromfield (+Murdock)"
         , locationLink = ""
-        , girlsPlace = "???"
+        , girlsPlace = "2nd, 1st"
         , girlsPoints = "???"
         , girlsResults = "static/img/results/20161013Bromfield&Murdock @ Bromfield-Girls.jpg"
-        , boysPlace = "???"
+        , boysPlace = "2nd, 2nd"
         , boysPoints = "???"
         , boysResults = "static/img/results/20161013-Bromfield&Murdock @ Bromfield-Boys.jpg"
         }
       , { date = "Oct. 5 2016"
-        , location = "Westford"
+        , location = "Westford (+Acton-Boxboro)"
         , locationLink = ""
-        , girlsPlace = "???"
+        , girlsPlace = "2nd, 2nd"
         , girlsPoints = "???"
         , girlsResults = "static/img/results/20161005-Westford&AB @ Stonybrook-Girls.jpg"
-        , boysPlace = "???"
+        , boysPlace = "2nd, 2nd"
         , boysPoints = "???"
         , boysResults = "static/img/results/20161005-Westford&AB @ Stonybrook-Boys.jpg"
         }
       , { date = "Sept. 29 2016"
-        , location = "Naragansett"
+        , location = "Naragansett (+Bromfield)"
         , locationLink = ""
-        , girlsPlace = "???"
+        , girlsPlace = "2nd, 2nd"
         , girlsPoints = "???"
         , girlsResults = "static/img/results/2016 Girls naragansett & bromfield @ naragansett.jpg"
-        , boysPlace = "???"
+        , boysPlace = "2nd, 2nd"
         , boysPoints = "???"
         , boysResults = "static/img/results/2016 Boys naragansett & bromfield @ naragansett.jpeg"
         }
@@ -137,8 +137,8 @@ rs2016 =
 
 results : List ResultSet
 results =
-  [ rs2017
-  , rs2016
+  -- [ rs2017
+  [ rs2016
   ]
 
 
@@ -155,7 +155,20 @@ viewResultSet : ResultSet -> Html Msg
 viewResultSet rs =
   div [ class "container" ]
     [ table [ class "table table-hover" ]
-      [ thead [] [ tr [] [ td [ rowspan 8 ] [ text rs.name ] ] ]
+      [ thead []
+        [ tr []
+          [ th [] [ h3 [] [ text rs.name ] ]
+          , th [] [ text "" ]
+          , th [] [ text "" ]
+          , th [] [ text "" ]
+          ]
+        , tr []
+          [ th [] [ text "Date" ]
+          , th [] [ text "Meet Location" ]
+          , th [] [ text "Girls" ]
+          , th [] [ text "Boys" ]
+          ]
+        ]
       , tbody [] (List.map viewResults rs.results)
       ]
     ]
@@ -165,11 +178,13 @@ viewResults result =
   tr []
     [ td [] [ text result.date ]
     , td [] [ (viewLocation result.location result.locationLink) ]
-    , td [] [ a [ href result.girlsResults ] [ text result.girlsPlace ] ]
-    , td [] [ text result.girlsPoints ]
-    , td [] [ a [ href result.boysResults ] [ text result.boysPlace ] ]
-    , td [] [ text result.boysPoints ]
+    , td [] (resultsValue result.girlsResults result.girlsPlace)
+    , td [] (resultsValue result.boysResults result.boysPlace)
     ]
+
+resultsValue : String -> String -> List (Html Msg)
+resultsValue l r =
+  [ a [ href l ] [ text r ] ]
 
 viewLocation location locationLink =
   case locationLink of
