@@ -64,12 +64,17 @@ $fa-font-path: "~font-awesome/fonts";
 }
 
 .card.photo {
+  color: #dac59b;
   background-color: #332000;
 }
 .card.photo .card-header {
   background-color: #332000;
   background: linear-gradient( rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1) );
 }
+// .card.photo .card-footer {
+//   background-color: #332000;
+//   // background: linear-gradient( rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1) );
+// }
 
 .card-info {
   background-color: #332000;
