@@ -6,7 +6,7 @@ import Navigation exposing (Location)
 import Bootstrap.Navbar
 import Bootstrap.Grid
 import Router
-
+import Auth
 
 { id, class, classList } =
     Html.CssHelpers.withNamespace "ebws"
@@ -34,15 +34,15 @@ main =
 
 init : Navigation.Location -> ( Model, Cmd Msg )
 init location =
-    let
-        ( routerModel, routerCmd ) =
-            Router.init location
-    in
-        ( { routerModel = routerModel
-          }
-        , routerCmd |> Cmd.map RouterMsg
-        )
-
+  let
+    ( routerModel, routerCmd ) = Router.init location
+    model = { routerModel = routerModel }
+  in
+    -- , routerCmd |> Cmd.map RouterMsg
+    ( model
+    , Cmd.batch
+      [ routerCmd |> Cmd.map RouterMsg ]
+    )
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
@@ -71,6 +71,4 @@ view : Model -> Html Msg
 view model =
   Bootstrap.Grid.containerFluid
     []
-    [ div [ ]
-      [ Router.view model.routerModel |> Html.map RouterMsg ]
-    ]
+    [ div [] [ Router.view model.routerModel |> Html.map RouterMsg ] ]
