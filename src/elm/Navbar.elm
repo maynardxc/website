@@ -45,21 +45,25 @@ view state currentRoute changeLocationMsgTagger navbarMsgTagger authModel =
 
 authItem : (String -> msg) -> Route -> Auth.Model -> Navbar.Item msg
 authItem changeLocationMsgTagger currentRoute authModel =
-  case ( authModel.token, authModel.profile ) of
-    ( Nothing, Nothing ) ->
+  case ( authModel.token, authModel.profile, authModel.calendar ) of
+    ( Nothing, Nothing, _ ) ->
       routeToItemLink changeLocationMsgTagger currentRoute SignInRoute Icon.user " Sign In"
 
-    ( Just token, Nothing ) ->
-      routeToItemLink changeLocationMsgTagger currentRoute SignInRoute Icon.spinner " ..."
+    ( Just token, Nothing, _ ) ->
+      routeToItemLink changeLocationMsgTagger currentRoute SignInRoute Icon.spinner " checking you out..."
 
-    ( _, Just profile ) ->
-      -- routeToItemLink changeLocationMsgTagger currentRoute SignInRoute Icon.user (" Welcome, " ++ profile.name ++ "!")
+    ( _, Just profile, Nothing ) ->
+      routeToItemLink changeLocationMsgTagger currentRoute SignInRoute Icon.spinner " validating..."
+
+    ( _, Just profile, Just calendar ) ->
       Navbar.itemLink
         [ href (encode SignInRoute)
         , attribute "data-navigate" (encode SignInRoute)
         , catchNavigationClicks (changeLocationMsgTagger (encode SignInRoute))
         ]
-        [ img
+        [ Icon.check_square
+        , text " "
+        , img
           [ src profile.picture
           , style
             [ ( "height", "25px" )

@@ -13,6 +13,7 @@ import OAuth.Implicit
 
 import Bootstrap.Navbar as Navbar exposing (State)
 
+import Debug exposing (log)
 
 -- Endpoints to interact with Google OAuth
 
@@ -25,12 +26,18 @@ profileEndpoint : String
 profileEndpoint =
     "https://www.googleapis.com/oauth2/v1/userinfo"
 
+calendarEndpoint : String
+calendarEndpoint =
+  "https://www.googleapis.com/calendar/v3/calendars/4sl4aopkrgcftcs6qg90fa06lc@group.calendar.google.com"
+  -- "https://www.googleapis.com/auth/calendar.readonly"
+  -- "https://www.googleapis.com/auth/calendar"
 
 type Msg
     = Nop
     | Authorize
     | UpdateClientId String
     | GetProfile (Result Http.Error Profile)
+    | GetCalendar (Result Http.Error Calendar)
 
 type alias Model =
   { oauth :
@@ -40,6 +47,7 @@ type alias Model =
   , error : Maybe String
   , token : Maybe OAuth.Token
   , profile : Maybe Profile
+  , calendar : Maybe Calendar
   }
 
 type alias Profile =
@@ -55,6 +63,25 @@ profileDecoder =
     (Json.field "name" Json.string)
     (Json.field "picture" Json.string)
 
+type alias Calendar =
+  { kind : String
+  , etag : String
+  , id : String
+  , summary : String
+  , description : String
+  , timeZone : String
+  }
+
+calendarDecoder : Json.Decoder Calendar
+calendarDecoder =
+  Json.map6 Calendar
+    (Json.field "kind" Json.string)
+    (Json.field "etag" Json.string)
+    (Json.field "id" Json.string)
+    (Json.field "summary" Json.string)
+    (Json.field "description" Json.string)
+    (Json.field "timeZone" Json.string)
+
 
 init : Navigation.Location -> ( Model, Cmd Msg )
 init location =
@@ -67,26 +94,39 @@ init location =
       , error = Nothing
       , token = Nothing
       , profile = Nothing
+      , calendar = Nothing
       }
   in
     case OAuth.Implicit.parse location of
       Ok { token } ->
         let
-          req =
+          theToken = OAuth.use token []
+          profileReq =
             Http.request
               { method = "GET"
               , body = Http.emptyBody
-              , headers = OAuth.use token []
+              , headers = theToken
               , withCredentials = False
               , url = profileEndpoint
               , expect = Http.expectJson profileDecoder
+              , timeout = Nothing
+              }
+          calendarReq =
+            Http.request
+              { method = "GET"
+              , body = Http.emptyBody
+              , headers = theToken ++ [ Http.header "foo" "bar" ]
+              , withCredentials = False
+              , url = calendarEndpoint
+              , expect = Http.expectJson calendarDecoder
               , timeout = Nothing
               }
         in
           ( { model | token = Just token }
           , Cmd.batch
             [ Navigation.modifyUrl model.oauth.redirectUri
-            , Http.send GetProfile req
+            , Http.send GetProfile profileReq
+            , Http.send GetCalendar calendarReq
             ]
           )
 
@@ -125,13 +165,25 @@ update msg ({ oauth } as model) =
           Ok profile ->
             { model | profile = Just profile } ! []
 
+      GetCalendar res ->
+        case res of
+          Err err ->
+            { model | error = Just "unable to fetch maynard xc calendar ¯\\_(ツ)_/¯" } ! []
+
+          Ok calendar ->
+            let
+              _ = log "calendar" calendar
+            in
+              { model | calendar = Just calendar } ! []
+
+
       Authorize ->
         model
           ! [ OAuth.Implicit.authorize
               { clientId = model.oauth.clientId
               , redirectUri = model.oauth.redirectUri
               , responseType = OAuth.Token
-              , scope = [ "email", "profile" ]
+              , scope = [ "email", "profile", "https://www.googleapis.com/auth/calendar.readonly" ]
               , state = Nothing
               , url = authorizationEndpoint
               }
@@ -143,14 +195,17 @@ navItem =
 
 view : Model -> Html Msg
 view model =
-  case ( model.token, model.profile ) of
-    ( Nothing, Nothing ) ->
+  case ( model.token, model.profile, model.calendar ) of
+    ( Nothing, Nothing, _ ) ->
       div [] [ button [ onClick Authorize ] [ text "Sign in" ] ]
 
-    ( Just token, Nothing ) ->
+    ( Just token, Nothing, _ ) ->
       div [] [ text "fetching profile..." ]
 
-    ( _, Just profile ) ->
+    ( _, Just profile, Nothing ) ->
+      div [] [ text "fetching calendar?..." ]
+
+    ( _, Just profile, Just calendar ) ->
       div []
         [ img
           [ src profile.picture
