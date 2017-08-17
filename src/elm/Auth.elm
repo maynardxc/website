@@ -11,6 +11,9 @@ import Json.Decode as Json
 import OAuth
 import OAuth.Implicit
 
+import Bootstrap.Navbar as Navbar exposing (State)
+
+
 -- Endpoints to interact with Google OAuth
 
 authorizationEndpoint : String
@@ -134,6 +137,9 @@ update msg ({ oauth } as model) =
               }
             ]
 
+navItem : Navbar.Item Msg
+navItem =
+  Navbar.itemLinkActive [ onClick Authorize ] [ text "signin" ]
 
 view : Model -> Html Msg
 view model =

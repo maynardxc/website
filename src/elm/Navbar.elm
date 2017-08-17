@@ -10,13 +10,14 @@ import FontAwesome.Web as Icon
 import MainCss
 import RouteHelper exposing (..)
 
+import Auth
 
 { id, class, classList } =
     Html.CssHelpers.withNamespace "ebws"
 
 
-view : State -> Route -> (String -> msg) -> (State -> msg) -> Html msg
-view state currentRoute changeLocationMsgTagger navbarMsgTagger =
+view : State -> Route -> (String -> msg) -> (State -> msg) -> Auth.Model -> Html msg
+view state currentRoute changeLocationMsgTagger navbarMsgTagger authModel =
   div []
     [ Navbar.config navbarMsgTagger
       |> Navbar.withAnimation
@@ -36,10 +37,39 @@ view state currentRoute changeLocationMsgTagger navbarMsgTagger =
         , routeToItemLink changeLocationMsgTagger currentRoute ResultsRoute Icon.trophy " Results"
         , routeToItemLink changeLocationMsgTagger currentRoute ScheduleRoute Icon.calendar " Schedule"
         , routeToItemLink changeLocationMsgTagger currentRoute CourseMapRoute Icon.map_marker " Course Map"
-        , routeToItemLink changeLocationMsgTagger currentRoute PhotosRoute Icon.lock " SignIn"
+        , authItem changeLocationMsgTagger currentRoute authModel
         ]
       |> Navbar.view state
     ]
+
+
+authItem : (String -> msg) -> Route -> Auth.Model -> Navbar.Item msg
+authItem changeLocationMsgTagger currentRoute authModel =
+  case ( authModel.token, authModel.profile ) of
+    ( Nothing, Nothing ) ->
+      routeToItemLink changeLocationMsgTagger currentRoute SignInRoute Icon.user " Sign In"
+
+    ( Just token, Nothing ) ->
+      routeToItemLink changeLocationMsgTagger currentRoute SignInRoute Icon.spinner " ..."
+
+    ( _, Just profile ) ->
+      -- routeToItemLink changeLocationMsgTagger currentRoute SignInRoute Icon.user (" Welcome, " ++ profile.name ++ "!")
+      Navbar.itemLink
+        [ href (encode SignInRoute)
+        , attribute "data-navigate" (encode SignInRoute)
+        , catchNavigationClicks (changeLocationMsgTagger (encode SignInRoute))
+        ]
+        [ img
+          [ src profile.picture
+          , style
+            [ ( "height", "25px" )
+            , ( "width", "25px" )
+            ]
+          ]
+          []
+        ]
+
+
 
 routeToItemLink : (String -> msg) -> Route -> Route -> Html msg -> String -> Navbar.Item msg
 routeToItemLink changeLocationMsgTagger currentRoute linkedToRoute icon title =

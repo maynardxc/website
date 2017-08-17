@@ -6,7 +6,7 @@ import Navigation exposing (Location)
 import Bootstrap.Navbar
 import Bootstrap.Grid
 import Router
-import Auth
+-- import Auth
 
 { id, class, classList } =
     Html.CssHelpers.withNamespace "ebws"
@@ -15,11 +15,13 @@ import Auth
 type Msg
     = OnLocationChange Location
     | RouterMsg Router.Msg
+    -- | AuthMsg Auth.Msg
 
 
 type alias Model =
-    { routerModel : Router.Model
-    }
+  { routerModel : Router.Model
+  -- , authModel : Auth.Model
+  }
 
 
 main : Program Never Model Msg
@@ -36,13 +38,18 @@ init : Navigation.Location -> ( Model, Cmd Msg )
 init location =
   let
     ( routerModel, routerCmd ) = Router.init location
-    model = { routerModel = routerModel }
+    -- ( authModel, authCmd ) = Auth.init location
   in
-    -- , routerCmd |> Cmd.map RouterMsg
-    ( model
+    ( { routerModel = routerModel
+      -- , authModel = authModel
+      }
     , Cmd.batch
-      [ routerCmd |> Cmd.map RouterMsg ]
+      [ routerCmd |> Cmd.map RouterMsg
+      -- , authCmd |> Cmd.map AuthMsg
+      ]
     )
+
+
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
@@ -51,24 +58,32 @@ subscriptions model =
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case msg of
-        OnLocationChange location ->
-            let
-                ( routerModel, routerCmd ) =
-                    Router.update (Router.OnLocationChange location) model.routerModel
-            in
-                ( { model | routerModel = routerModel }, routerCmd |> Cmd.map RouterMsg )
+  case msg of
+    OnLocationChange location ->
+      let
+        ( routerModel, routerCmd ) =
+          Router.update (Router.OnLocationChange location) model.routerModel
+      in
+        ( { model | routerModel = routerModel }, routerCmd |> Cmd.map RouterMsg )
 
-        RouterMsg routerMsg ->
-            let
-                ( routerModel, routerCmd ) =
-                    Router.update routerMsg model.routerModel
-            in
-                ( { model | routerModel = routerModel }, routerCmd |> Cmd.map RouterMsg )
+    RouterMsg routerMsg ->
+      let
+        ( routerModel, routerCmd ) =
+          Router.update routerMsg model.routerModel
+      in
+        ( { model | routerModel = routerModel }, routerCmd |> Cmd.map RouterMsg )
+
+    -- AuthMsg authMsg ->
+    --   let
+    --     ( authModel, authCmd ) = Auth.update authMsg model.authModel
+    --   in
+    --     ( { model | authModel = authModel }, authCmd |> Cmd.map AuthMsg )
 
 
 view : Model -> Html Msg
 view model =
   Bootstrap.Grid.containerFluid
     []
-    [ div [] [ Router.view model.routerModel |> Html.map RouterMsg ] ]
+    -- [ div [] [ Auth.view model.authModel |> Html.map AuthMsg ]
+    [ div [] [ Router.view model.routerModel |> Html.map RouterMsg ]
+    ]
