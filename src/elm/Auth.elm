@@ -11,6 +11,7 @@ import Json.Decode as Json
 import OAuth
 import OAuth.Implicit
 
+import Bootstrap.Card as Card
 import Bootstrap.Navbar as Navbar exposing (State)
 
 import Debug exposing (log)
@@ -35,6 +36,7 @@ calendarEndpoint =
 type Msg
     = Nop
     | Authorize
+    | SignOut
     | UpdateClientId String
     | GetProfile (Result Http.Error Profile)
     | GetCalendar (Result Http.Error CalendarData)
@@ -146,7 +148,7 @@ init location =
         )
 
       Err _ ->
-        ( { model | error = Just "parsing error" }, Cmd.batch [] )
+        ( { model | error = Just "parsing error while authenticating to Google" }, Cmd.batch [] )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -182,7 +184,23 @@ update msg ({ oauth } as model) =
               , calendarData = Nothing
               }
         in
-          { model | calendar = Just calendar } ! []
+          case res of
+            Ok calendarData ->
+              { model
+                | calendar = Just
+                  { authorized = True
+                  , calendarData = Just calendarData
+                  }
+              , error = Nothing
+              } ! []
+            Err err ->
+              { model
+                | calendar = Just
+                  { authorized = False
+                  , calendarData = Nothing
+                  }
+              , error = Just "Failed to validate access to the team calendar!"
+              } ! []
 
       Authorize ->
         model
@@ -196,49 +214,93 @@ update msg ({ oauth } as model) =
               }
             ]
 
-navItem : Navbar.Item Msg
-navItem =
-  Navbar.itemLinkActive [ onClick Authorize ] [ text "signin" ]
+      SignOut ->
+        { model
+          | error = Nothing
+          , token = Nothing
+          , profile = Nothing
+          , calendar = Nothing
+        } ! []
 
 view : Model -> Html Msg
 view model =
-  case ( model.token, model.profile, model.calendar ) of
-    ( Nothing, Nothing, _ ) ->
-      div [] [ button [ onClick Authorize ] [ text "Sign in" ] ]
-
-    ( Just token, Nothing, _ ) ->
-      div [] [ text "fetching profile..." ]
-
-    ( _, Just profile, Nothing ) ->
-      div [] [ text "fetching calendar?..." ]
-
-    ( _, Just profile, Just calendar ) ->
-      case calendar.authorized of
-        False ->
-          div []
-            [ img
-              [ src profile.picture
-                , style
-                  [ ( "height", "50px" )
-                  , ( "margin", "1em" )
-                  , ( "width", "50px" )
-                  ]
-                ]
-                []
-            , text <| profile.name ++ " <" ++ profile.email ++ ">" ++ " is not part of the team calendar"
+  let
+    content = case ( model.token, model.profile, model.calendar ) of
+      ( Nothing, Nothing, _ ) ->
+        div []
+          [ p []
+            [ text
+              ( "If you are a member (or parent) of the cross country team log in "
+              ++ "using your Google account to see photos and the team calendar."
+              )
             ]
-        True ->
-          div []
-            [ img
-              [ src profile.picture
-                , style
-                  [ ( "height", "50px" )
-                  , ( "margin", "1em" )
-                  , ( "width", "50px" )
-                  ]
+          , button [ onClick Authorize ] [ text "Sign in" ]
+          ]
+
+      ( Just token, Nothing, _ ) ->
+        div [] [ text "...emboldening HTML5 technologies..." ]
+
+      ( _, Just profile, Nothing ) ->
+        div [] [ text "...leaveraging corporate synergies..." ]
+
+      ( _, Just profile, Just calendar ) ->
+        case calendar.authorized of
+          False ->
+            div []
+              [ viewProfilePhoto profile
+              , p []
+                [ text
+                  ( "Hey " ++ profile.name ++ "! "
+                  ++ "You do not seem to be allowed to access the team content."
+                  )
                 ]
-                []
-            ]
+              , p []
+                [ text
+                  ( "If you would like to access team content, please ask Coach Karen"
+                  ++ " to add you to the team calendar."
+                  )
+                ]
+              , viewSignOut
+              ]
+
+          True ->
+            div []
+              [ viewProfilePhoto profile
+              , p [] [ text ( "Hi " ++ profile.name ++ "! " ) ]
+              , viewSignOut
+              ]
+
+  in
+    viewLogin model content
+
+viewLogin : Model -> Html Msg -> Html Msg
+viewLogin model content =
+  div [ class "container text-center" ]
+    [ Card.config [ Card.info, Card.attrs [] ]
+      |> Card.block []
+        [ Card.titleH3 [] [ text "Access Team Content" ]
+        , Card.text [] [ content ]
+        ]
+      |> Card.footer [] []
+      |> Card.view
+    ]
+
+viewProfilePhoto : Profile -> Html Msg
+viewProfilePhoto profile =
+  img
+    [ src profile.picture
+    , alt profile.email
+    , style
+      [ ( "height", "250px" )
+      , ( "margin", "1em" )
+      , ( "width", "250px" )
+      ]
+    ]
+    []
+
+viewSignOut : Html Msg
+viewSignOut =
+  button [ onClick SignOut ] [ text "Sign Out" ]
 
 isAuthorized : Maybe Calendar -> Bool
 isAuthorized calendar =

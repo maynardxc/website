@@ -6,7 +6,6 @@ import Navigation exposing (Location)
 import Bootstrap.Navbar
 import Bootstrap.Grid
 import Router
--- import Auth
 
 { id, class, classList } =
     Html.CssHelpers.withNamespace "ebws"
@@ -15,12 +14,10 @@ import Router
 type Msg
     = OnLocationChange Location
     | RouterMsg Router.Msg
-    -- | AuthMsg Auth.Msg
 
 
 type alias Model =
   { routerModel : Router.Model
-  -- , authModel : Auth.Model
   }
 
 
@@ -38,15 +35,9 @@ init : Navigation.Location -> ( Model, Cmd Msg )
 init location =
   let
     ( routerModel, routerCmd ) = Router.init location
-    -- ( authModel, authCmd ) = Auth.init location
   in
-    ( { routerModel = routerModel
-      -- , authModel = authModel
-      }
-    , Cmd.batch
-      [ routerCmd |> Cmd.map RouterMsg
-      -- , authCmd |> Cmd.map AuthMsg
-      ]
+    ( { routerModel = routerModel }
+    , Cmd.batch [ routerCmd |> Cmd.map RouterMsg ]
     )
 
 
@@ -73,17 +64,10 @@ update msg model =
       in
         ( { model | routerModel = routerModel }, routerCmd |> Cmd.map RouterMsg )
 
-    -- AuthMsg authMsg ->
-    --   let
-    --     ( authModel, authCmd ) = Auth.update authMsg model.authModel
-    --   in
-    --     ( { model | authModel = authModel }, authCmd |> Cmd.map AuthMsg )
-
 
 view : Model -> Html Msg
 view model =
   Bootstrap.Grid.containerFluid
     []
-    -- [ div [] [ Auth.view model.authModel |> Html.map AuthMsg ]
     [ div [] [ Router.view model.routerModel |> Html.map RouterMsg ]
     ]

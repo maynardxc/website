@@ -158,9 +158,17 @@ view : Model -> Html Msg
 view model =
     div []
         [ Navbar.view model.navbarState model.route ChangeLocation NavbarMsg model.authModel
+        , authError model.authModel
         , page model
         ]
 
+authError : Auth.Model -> Html Msg
+authError authModel =
+  case authModel.error of
+    Nothing ->
+      div [] []
+    Just s ->
+      div [ class "alert alert-danger" ] [ text s ]
 
 page : Model -> Html Msg
 page model =
