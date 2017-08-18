@@ -37,7 +37,7 @@ type Msg
     | Authorize
     | UpdateClientId String
     | GetProfile (Result Http.Error Profile)
-    | GetCalendar (Result Http.Error Calendar)
+    | GetCalendar (Result Http.Error CalendarData)
 
 type alias Model =
   { oauth :
@@ -64,6 +64,11 @@ profileDecoder =
     (Json.field "picture" Json.string)
 
 type alias Calendar =
+  { authorized : Bool
+  , calendarData : Maybe CalendarData
+  }
+
+type alias CalendarData =
   { kind : String
   , etag : String
   , id : String
@@ -72,9 +77,9 @@ type alias Calendar =
   , timeZone : String
   }
 
-calendarDecoder : Json.Decoder Calendar
+calendarDecoder : Json.Decoder CalendarData
 calendarDecoder =
-  Json.map6 Calendar
+  Json.map6 CalendarData
     (Json.field "kind" Json.string)
     (Json.field "etag" Json.string)
     (Json.field "id" Json.string)
@@ -166,16 +171,18 @@ update msg ({ oauth } as model) =
             { model | profile = Just profile } ! []
 
       GetCalendar res ->
-        case res of
-          Err err ->
-            { model | error = Just "unable to fetch maynard xc calendar ¯\\_(ツ)_/¯" } ! []
-
-          Ok calendar ->
-            let
-              _ = log "calendar" calendar
-            in
-              { model | calendar = Just calendar } ! []
-
+        let
+          calendar = case res of
+            Ok calendarData ->
+              { authorized = True
+              , calendarData = Just calendarData
+              }
+            Err err ->
+              { authorized = False
+              , calendarData = Nothing
+              }
+        in
+          { model | calendar = Just calendar } ! []
 
       Authorize ->
         model
@@ -206,15 +213,38 @@ view model =
       div [] [ text "fetching calendar?..." ]
 
     ( _, Just profile, Just calendar ) ->
-      div []
-        [ img
-          [ src profile.picture
-            , style
-              [ ( "height", "50px" )
-              , ( "margin", "1em" )
-              , ( "width", "50px" )
-              ]
+      case calendar.authorized of
+        False ->
+          div []
+            [ img
+              [ src profile.picture
+                , style
+                  [ ( "height", "50px" )
+                  , ( "margin", "1em" )
+                  , ( "width", "50px" )
+                  ]
+                ]
+                []
+            , text <| profile.name ++ " <" ++ profile.email ++ ">" ++ " is not part of the team calendar"
             ]
-            []
-        -- , text <| profile.name ++ " <" ++ profile.email ++ ">"
-        ]
+        True ->
+          div []
+            [ img
+              [ src profile.picture
+                , style
+                  [ ( "height", "50px" )
+                  , ( "margin", "1em" )
+                  , ( "width", "50px" )
+                  ]
+                ]
+                []
+            ]
+
+isAuthorized : Maybe Calendar -> Bool
+isAuthorized calendar =
+  case calendar of
+    Just calendar ->
+      calendar.authorized
+
+    Nothing ->
+      False

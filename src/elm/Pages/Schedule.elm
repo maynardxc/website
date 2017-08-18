@@ -9,6 +9,8 @@ import Html.CssHelpers
 import MainCss
 import FontAwesome.Web as Icon
 
+import Auth
+
 type Msg = None
 
 type HomeAway = Home | Away
@@ -116,8 +118,33 @@ update msg model =
     ( model, Cmd.none )
 
 
-view : Model -> Html Msg
-view model =
+view : Model -> Auth.Model -> Html Msg
+view model authModel =
+  case (Auth.isAuthorized authModel.calendar) of
+    False ->
+      viewUnprivileged model
+
+    True ->
+      viewPrivileged model
+
+
+viewPrivileged : Model -> Html Msg
+viewPrivileged model =
+  div [ class "container" ]
+    [ iframe
+      [ src "https://calendar.google.com/calendar/embed?src=4sl4aopkrgcftcs6qg90fa06lc%40group.calendar.google.com&ctz=America/New_York"
+      , style
+        [ ("border","0")
+        , ("width", "100%")
+        , ("height", "600px")
+        ]
+      ]
+      []
+    ]
+
+
+viewUnprivileged : Model -> Html Msg
+viewUnprivileged model =
   div [ class "container" ]
     [ table [ class "table table-hover" ]
       [ thead []

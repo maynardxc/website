@@ -56,22 +56,39 @@ authItem changeLocationMsgTagger currentRoute authModel =
       routeToItemLink changeLocationMsgTagger currentRoute SignInRoute Icon.spinner " validating..."
 
     ( _, Just profile, Just calendar ) ->
-      Navbar.itemLink
-        [ href (encode SignInRoute)
-        , attribute "data-navigate" (encode SignInRoute)
-        , catchNavigationClicks (changeLocationMsgTagger (encode SignInRoute))
-        ]
-        [ Icon.check_square
-        , text " "
-        , img
-          [ src profile.picture
-          , style
-            [ ( "height", "25px" )
-            , ( "width", "25px" )
+      let
+        contents = case calendar.authorized of
+          False ->
+            [ Icon.ban
+            , text " "
+            , img
+              [ src profile.picture
+              , style
+                [ ( "height", "25px" )
+                , ( "width", "25px" )
+                ]
+              ]
+              []
             ]
+          True ->
+            [ Icon.check_square
+            , text " "
+            , img
+              [ src profile.picture
+              , style
+                [ ( "height", "25px" )
+                , ( "width", "25px" )
+                ]
+              ]
+              []
+            ]
+      in
+        Navbar.itemLink
+          [ href (encode SignInRoute)
+          , attribute "data-navigate" (encode SignInRoute)
+          , catchNavigationClicks (changeLocationMsgTagger (encode SignInRoute))
           ]
-          []
-        ]
+          contents
 
 
 

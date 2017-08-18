@@ -182,7 +182,7 @@ page model =
                 Html.map AuthMsg (Auth.view model.authModel)
 
             ScheduleRoute ->
-                Html.map SchedulePageMsg (Pages.Schedule.view model.schedulePageModel)
+                Html.map SchedulePageMsg (Pages.Schedule.view model.schedulePageModel model.authModel)
 
             NotFoundRoute ->
                   div [ class "container text-center" ]
