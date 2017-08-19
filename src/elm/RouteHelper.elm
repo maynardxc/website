@@ -17,9 +17,8 @@ type Route
     | ResultsRoute
     | CourseMapRoute
     | CourseMap2016Route
-    | PhotosRoute
     | ScheduleRoute
-    | PressRoute
+    | SignInRoute
     | NotFoundRoute
 
 
@@ -30,9 +29,8 @@ routeParser =
     , UrlParser.map ResultsRoute (UrlParser.s "results")
     , UrlParser.map CourseMapRoute (UrlParser.s "coursemap")
     , UrlParser.map CourseMap2016Route (UrlParser.s "coursemap2016")
-    , UrlParser.map PhotosRoute (UrlParser.s "photos")
     , UrlParser.map ScheduleRoute (UrlParser.s "schedule")
-    , UrlParser.map PressRoute (UrlParser.s "press")
+    , UrlParser.map SignInRoute (UrlParser.s "signin")
     ]
 
 
@@ -51,9 +49,8 @@ encode route =
       ResultsRoute -> "results"
       CourseMapRoute -> "coursemap"
       CourseMap2016Route -> "coursemap2016"
-      PhotosRoute -> "photos"
       ScheduleRoute -> "schedule"
-      PressRoute -> "press"
+      SignInRoute -> "signin"
       NotFoundRoute -> ""
   in
     "#/" ++ path

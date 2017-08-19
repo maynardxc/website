@@ -19,6 +19,7 @@ import RouteHelper exposing (..)
 
 import Bootstrap.Card as Card
 
+import Auth
 
 type Msg
     = ChangeLocation String
@@ -28,9 +29,8 @@ type Msg
     | ResultsPageMsg Pages.Results.Msg
     | CourseMapPageMsg Pages.CourseMap.Msg
     | CourseMap2016PageMsg Pages.CourseMap2016.Msg
-    | PhotosPageMsg Pages.Photos.Msg
     | SchedulePageMsg Pages.Schedule.Msg
-    | PressPageMsg Pages.Press.Msg
+    | AuthMsg Auth.Msg
 
 
 type alias Model =
@@ -40,33 +40,36 @@ type alias Model =
     , resultsPageModel : Pages.Results.Model
     , courseMapPageModel : Pages.CourseMap.Model
     , courseMap2016PageModel : Pages.CourseMap2016.Model
-    , photosPageModel : Pages.Photos.Model
     , schedulePageModel : Pages.Schedule.Model
-    , pressPageModel : Pages.Press.Model
+    , authModel : Auth.Model
     }
 
 
 init : Navigation.Location -> ( Model, Cmd Msg )
 init location =
-    let
-        currentRoute =
-            parseLocation location
+  let
+    currentRoute = parseLocation location
 
-        ( navbarState, navbarCmd ) =
-            Bootstrap.Navbar.initialState NavbarMsg
-    in
-        ( { route = currentRoute
-          , navbarState = navbarState
-          , homePageModel = Pages.Home.init
-          , resultsPageModel = Pages.Results.init
-          , courseMapPageModel = Pages.CourseMap.init
-          , courseMap2016PageModel = Pages.CourseMap2016.init
-          , photosPageModel = Pages.Photos.init
-          , schedulePageModel = Pages.Schedule.init
-          , pressPageModel = Pages.Press.init
-          }
-        , navbarCmd
-        )
+    ( navbarState, navbarCmd ) =
+      Bootstrap.Navbar.initialState NavbarMsg
+
+    ( authModel, authCmd ) = Auth.init location
+
+  in
+    ( { route = currentRoute
+      , navbarState = navbarState
+      , homePageModel = Pages.Home.init
+      , resultsPageModel = Pages.Results.init
+      , courseMapPageModel = Pages.CourseMap.init
+      , courseMap2016PageModel = Pages.CourseMap2016.init
+      , schedulePageModel = Pages.Schedule.init
+      , authModel = authModel
+      }
+    , Cmd.batch
+      [ authCmd |> Cmd.map AuthMsg
+      , navbarCmd
+      ]
+    )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -97,15 +100,11 @@ update msg model =
         CourseMap2016PageMsg courseMap2016PageMsg ->
             updateCourseMap2016Page courseMap2016PageMsg model
 
-        PhotosPageMsg photosPageMsg ->
-            updatePhotosPage photosPageMsg model
-
         SchedulePageMsg schedulePageMsg ->
             updateSchedulePage schedulePageMsg model
 
-        PressPageMsg pressPageMsg ->
-            updatePressPage pressPageMsg model
-
+        AuthMsg authMsg ->
+          updateSignInPage authMsg model
 
 updateHomePage : Pages.Home.Msg -> Model -> ( Model, Cmd Msg )
 updateHomePage msg model =
@@ -114,14 +113,6 @@ updateHomePage msg model =
             Pages.Home.update msg model.homePageModel
     in
         ( { model | homePageModel = homePageModel }, homePageCmd |> Cmd.map HomePageMsg )
-
-updatePressPage : Pages.Press.Msg -> Model -> ( Model, Cmd Msg )
-updatePressPage msg model =
-    let
-        ( pressPageModel, pressPageCmd ) =
-            Pages.Press.update msg model.pressPageModel
-    in
-        ( { model | pressPageModel = pressPageModel }, pressPageCmd |> Cmd.map PressPageMsg )
 
 updateResultsPage : Pages.Results.Msg -> Model -> ( Model, Cmd Msg )
 updateResultsPage msg model =
@@ -147,13 +138,12 @@ updateCourseMap2016Page msg model =
     in
         ( { model | courseMap2016PageModel = courseMap2016PageModel }, courseMap2016PageCmd |> Cmd.map CourseMap2016PageMsg )
 
-updatePhotosPage : Pages.Photos.Msg -> Model -> ( Model, Cmd Msg )
-updatePhotosPage msg model =
-    let
-        ( photosPageModel, photosPageCmd ) =
-            Pages.Photos.update msg model.photosPageModel
-    in
-        ( { model | photosPageModel = photosPageModel }, photosPageCmd |> Cmd.map PhotosPageMsg )
+updateSignInPage : Auth.Msg -> Model -> ( Model, Cmd Msg )
+updateSignInPage msg model =
+  let
+    ( authModel, signInPageCmd ) = Auth.update msg model.authModel
+  in
+    ( { model | authModel = authModel }, signInPageCmd |> Cmd.map AuthMsg )
 
 updateSchedulePage : Pages.Schedule.Msg -> Model -> ( Model, Cmd Msg )
 updateSchedulePage msg model =
@@ -167,10 +157,18 @@ updateSchedulePage msg model =
 view : Model -> Html Msg
 view model =
     div []
-        [ Navbar.view model.navbarState model.route ChangeLocation NavbarMsg
+        [ Navbar.view model.navbarState model.route ChangeLocation NavbarMsg model.authModel
+        , authError model.authModel
         , page model
         ]
 
+authError : Auth.Model -> Html Msg
+authError authModel =
+  case authModel.error of
+    Nothing ->
+      div [] []
+    Just s ->
+      div [ class "alert alert-danger" ] [ text s ]
 
 page : Model -> Html Msg
 page model =
@@ -188,14 +186,11 @@ page model =
             CourseMap2016Route ->
                 Html.map CourseMap2016PageMsg (Pages.CourseMap2016.view model.courseMap2016PageModel)
 
-            PhotosRoute ->
-                Html.map PhotosPageMsg (Pages.Photos.view model.photosPageModel)
+            SignInRoute ->
+                Html.map AuthMsg (Auth.view model.authModel)
 
             ScheduleRoute ->
-                Html.map SchedulePageMsg (Pages.Schedule.view model.schedulePageModel)
-
-            PressRoute ->
-                Html.map PressPageMsg (Pages.Press.view model.pressPageModel)
+                Html.map SchedulePageMsg (Pages.Schedule.view model.schedulePageModel model.authModel)
 
             NotFoundRoute ->
                   div [ class "container text-center" ]

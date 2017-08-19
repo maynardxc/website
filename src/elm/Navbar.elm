@@ -10,68 +10,101 @@ import FontAwesome.Web as Icon
 import MainCss
 import RouteHelper exposing (..)
 
+import Auth
 
 { id, class, classList } =
     Html.CssHelpers.withNamespace "ebws"
 
 
-view : State -> Route -> (String -> msg) -> (State -> msg) -> Html msg
-view state currentRoute changeLocationMsgTagger navbarMsgTagger =
-    div [ ]
-        [ Navbar.config navbarMsgTagger
-            |> Navbar.withAnimation
-            |> Navbar.collapseMedium
-            |> Navbar.fixTop
-            |> Navbar.brand
-                [ href "/" ]
-                [ img
-                    [ src "static/img/tiger_blink.gif"
-                    , class [ MainCss.BrandLogo ]
-                    ]
-                    []
-                , text " Maynard Cross Country"
-                ]
-            |> Navbar.items
-                [ routeToItemLink changeLocationMsgTagger currentRoute HomeRoute Icon.home " Home"
-                , routeToItemLink changeLocationMsgTagger currentRoute ResultsRoute Icon.trophy " Results"
-                , routeToItemLink changeLocationMsgTagger currentRoute ScheduleRoute Icon.calendar " Schedule"
-                , routeToItemLink changeLocationMsgTagger currentRoute CourseMapRoute Icon.map_marker " Course Map"
-                -- , routeToItemLink changeLocationMsgTagger currentRoute PhotosRoute Icon.photo " Photos"
-                -- , routeToItemLink changeLocationMsgTagger currentRoute PressRoute Icon.newspaper_o " Press"
-                ]
-            |> Navbar.view state
+view : State -> Route -> (String -> msg) -> (State -> msg) -> Auth.Model -> Html msg
+view state currentRoute changeLocationMsgTagger navbarMsgTagger authModel =
+  div []
+    [ Navbar.config navbarMsgTagger
+      |> Navbar.withAnimation
+      |> Navbar.collapseMedium
+      |> Navbar.fixTop
+      |> Navbar.brand
+        [ href "/" ]
+          [ img
+            [ src "static/img/tiger_blink.gif"
+            , class [ MainCss.BrandLogo ]
+            ]
+            []
+          , text " Maynard Cross Country"
+          ]
+      |> Navbar.items
+        [ routeToItemLink changeLocationMsgTagger currentRoute HomeRoute Icon.home " Home"
+        , routeToItemLink changeLocationMsgTagger currentRoute ResultsRoute Icon.trophy " Results"
+        , routeToItemLink changeLocationMsgTagger currentRoute ScheduleRoute Icon.calendar " Schedule"
+        , routeToItemLink changeLocationMsgTagger currentRoute CourseMapRoute Icon.map_marker " Course Map"
+        , authItem changeLocationMsgTagger currentRoute authModel
         ]
+      |> Navbar.view state
+    ]
+
+
+authItem : (String -> msg) -> Route -> Auth.Model -> Navbar.Item msg
+authItem changeLocationMsgTagger currentRoute authModel =
+  case ( authModel.token, authModel.profile, authModel.calendar ) of
+    ( Nothing, Nothing, _ ) ->
+      routeToItemLink changeLocationMsgTagger currentRoute SignInRoute Icon.user " Sign In"
+
+    ( Just token, Nothing, _ ) ->
+      routeToItemLink changeLocationMsgTagger currentRoute SignInRoute Icon.spinner " checking you out..."
+
+    ( _, Just profile, Nothing ) ->
+      routeToItemLink changeLocationMsgTagger currentRoute SignInRoute Icon.spinner " validating..."
+
+    ( _, Just profile, Just calendar ) ->
+      let
+        contents = case calendar.authorized of
+          False ->
+            [ Icon.ban
+            , text " "
+            , img
+              [ src profile.picture
+              , style
+                [ ( "height", "25px" )
+                , ( "width", "25px" )
+                ]
+              ]
+              []
+            ]
+          True ->
+            [ Icon.check_square
+            , text " "
+            , img
+              [ src profile.picture
+              , style
+                [ ( "height", "25px" )
+                , ( "width", "25px" )
+                ]
+              ]
+              []
+            ]
+      in
+        Navbar.itemLink
+          [ href (encode SignInRoute)
+          , attribute "data-navigate" (encode SignInRoute)
+          , catchNavigationClicks (changeLocationMsgTagger (encode SignInRoute))
+          ]
+          contents
+
 
 
 routeToItemLink : (String -> msg) -> Route -> Route -> Html msg -> String -> Navbar.Item msg
 routeToItemLink changeLocationMsgTagger currentRoute linkedToRoute icon title =
-    let
-        path =
-            encode linkedToRoute
-
-        itemLink =
-            if currentRoute == linkedToRoute then
-                Navbar.itemLinkActive
-            else
-                Navbar.itemLink
-    in
-        itemLink
-            [ href path
-            , attribute "data-navigate" path
-            , catchNavigationClicks (changeLocationMsgTagger path)
-            ]
-            [ icon, text title ]
-
-
-routeToDropdownItem : (String -> msg) -> Route -> String -> Navbar.DropdownItem msg
-routeToDropdownItem changeLocationMsgTagger linkedToRoute title =
-    let
-        path =
-            encode linkedToRoute
-    in
-        Navbar.dropdownItem
-            [ href path
-            , attribute "data-navigate" path
-            , catchNavigationClicks (changeLocationMsgTagger path)
-            ]
-            [ text title ]
+  let
+    path = encode linkedToRoute
+    itemLink =
+      if currentRoute == linkedToRoute then
+        Navbar.itemLinkActive
+      else
+        Navbar.itemLink
+  in
+    itemLink
+      [ href path
+      , attribute "data-navigate" path
+      , catchNavigationClicks (changeLocationMsgTagger path)
+      ]
+      [ icon, text title ]

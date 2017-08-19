@@ -43,10 +43,3 @@ view model =
         [ small [ class "text-muted" ] [ a [ href "/#/coursemap2016" ] [ text "See the previous course" ] ] ]
       |> Card.view
     ]
-    -- [ div [ class "jumbotron" ] [ text "2017 course" ]
-    -- , img
-    --   [ class "img-responsive center-block"
-    --   , src "static/img/2017_coursemap.jpg"
-    --   ]
-    --   []
-    -- ]

@@ -7,7 +7,6 @@ import Bootstrap.Navbar
 import Bootstrap.Grid
 import Router
 
-
 { id, class, classList } =
     Html.CssHelpers.withNamespace "ebws"
 
@@ -18,8 +17,8 @@ type Msg
 
 
 type alias Model =
-    { routerModel : Router.Model
-    }
+  { routerModel : Router.Model
+  }
 
 
 main : Program Never Model Msg
@@ -34,14 +33,13 @@ main =
 
 init : Navigation.Location -> ( Model, Cmd Msg )
 init location =
-    let
-        ( routerModel, routerCmd ) =
-            Router.init location
-    in
-        ( { routerModel = routerModel
-          }
-        , routerCmd |> Cmd.map RouterMsg
-        )
+  let
+    ( routerModel, routerCmd ) = Router.init location
+  in
+    ( { routerModel = routerModel }
+    , Cmd.batch [ routerCmd |> Cmd.map RouterMsg ]
+    )
+
 
 
 subscriptions : Model -> Sub Msg
@@ -51,26 +49,25 @@ subscriptions model =
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case msg of
-        OnLocationChange location ->
-            let
-                ( routerModel, routerCmd ) =
-                    Router.update (Router.OnLocationChange location) model.routerModel
-            in
-                ( { model | routerModel = routerModel }, routerCmd |> Cmd.map RouterMsg )
+  case msg of
+    OnLocationChange location ->
+      let
+        ( routerModel, routerCmd ) =
+          Router.update (Router.OnLocationChange location) model.routerModel
+      in
+        ( { model | routerModel = routerModel }, routerCmd |> Cmd.map RouterMsg )
 
-        RouterMsg routerMsg ->
-            let
-                ( routerModel, routerCmd ) =
-                    Router.update routerMsg model.routerModel
-            in
-                ( { model | routerModel = routerModel }, routerCmd |> Cmd.map RouterMsg )
+    RouterMsg routerMsg ->
+      let
+        ( routerModel, routerCmd ) =
+          Router.update routerMsg model.routerModel
+      in
+        ( { model | routerModel = routerModel }, routerCmd |> Cmd.map RouterMsg )
 
 
 view : Model -> Html Msg
 view model =
   Bootstrap.Grid.containerFluid
     []
-    [ div [ ]
-      [ Router.view model.routerModel |> Html.map RouterMsg ]
+    [ div [] [ Router.view model.routerModel |> Html.map RouterMsg ]
     ]
