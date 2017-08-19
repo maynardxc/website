@@ -18,29 +18,42 @@ import Auth
 
 view : State -> Route -> (String -> msg) -> (State -> msg) -> Auth.Model -> Html msg
 view state currentRoute changeLocationMsgTagger navbarMsgTagger authModel =
-  div []
-    [ Navbar.config navbarMsgTagger
-      |> Navbar.withAnimation
-      |> Navbar.collapseMedium
-      |> Navbar.fixTop
-      |> Navbar.brand
-        [ href "/" ]
-          [ img
-            [ src "static/img/tiger_blink.gif"
-            , class [ MainCss.BrandLogo ]
-            ]
-            []
-          , text " Maynard Cross Country"
+  let
+    authItems = case Auth.isAuthorized authModel.calendar of
+      False ->
+        []
+      True ->
+        -- , routeToItemLink changeLocationMsgTagger currentRoute ForumRoute Icon.group " Forum"
+        [ Navbar.itemLink
+          [ href "https://groups.google.com/forum/#!forum/maynardxc" ]
+          [ Icon.group
+          , text " Forum"
           ]
-      |> Navbar.items
-        [ routeToItemLink changeLocationMsgTagger currentRoute HomeRoute Icon.home " Home"
-        , routeToItemLink changeLocationMsgTagger currentRoute ResultsRoute Icon.trophy " Results"
-        , routeToItemLink changeLocationMsgTagger currentRoute ScheduleRoute Icon.calendar " Schedule"
-        , routeToItemLink changeLocationMsgTagger currentRoute CourseMapRoute Icon.map_marker " Course Map"
-        , authItem changeLocationMsgTagger currentRoute authModel
         ]
-      |> Navbar.view state
-    ]
+  in
+    div []
+      [ Navbar.config navbarMsgTagger
+        |> Navbar.withAnimation
+        |> Navbar.collapseMedium
+        |> Navbar.fixTop
+        |> Navbar.brand
+          [ href "/" ]
+            [ img
+              [ src "static/img/tiger_blink.gif"
+              , class [ MainCss.BrandLogo ]
+              ]
+              []
+            , text " Maynard Cross Country"
+            ]
+        |> Navbar.items
+          ([ routeToItemLink changeLocationMsgTagger currentRoute HomeRoute Icon.home " Home"
+          , routeToItemLink changeLocationMsgTagger currentRoute ResultsRoute Icon.trophy " Results"
+          , routeToItemLink changeLocationMsgTagger currentRoute ScheduleRoute Icon.calendar " Schedule"
+          , routeToItemLink changeLocationMsgTagger currentRoute CourseMapRoute Icon.map_marker " Course Map"
+          , authItem changeLocationMsgTagger currentRoute authModel
+          ] ++ authItems)
+        |> Navbar.view state
+      ]
 
 
 authItem : (String -> msg) -> Route -> Auth.Model -> Navbar.Item msg

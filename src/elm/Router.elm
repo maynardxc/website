@@ -13,6 +13,7 @@ import Pages.CourseMap
 import Pages.CourseMap2016
 import Pages.Photos
 import Pages.Schedule
+import Pages.Forum
 import Pages.Press
 import Navbar
 import RouteHelper exposing (..)
@@ -30,6 +31,7 @@ type Msg
     | CourseMapPageMsg Pages.CourseMap.Msg
     | CourseMap2016PageMsg Pages.CourseMap2016.Msg
     | SchedulePageMsg Pages.Schedule.Msg
+    | ForumPageMsg Pages.Forum.Msg
     | AuthMsg Auth.Msg
 
 
@@ -41,6 +43,7 @@ type alias Model =
     , courseMapPageModel : Pages.CourseMap.Model
     , courseMap2016PageModel : Pages.CourseMap2016.Model
     , schedulePageModel : Pages.Schedule.Model
+    , forumPageModel : Pages.Forum.Model
     , authModel : Auth.Model
     }
 
@@ -63,6 +66,7 @@ init location =
       , courseMapPageModel = Pages.CourseMap.init
       , courseMap2016PageModel = Pages.CourseMap2016.init
       , schedulePageModel = Pages.Schedule.init
+      , forumPageModel = Pages.Forum.init
       , authModel = authModel
       }
     , Cmd.batch
@@ -102,6 +106,9 @@ update msg model =
 
         SchedulePageMsg schedulePageMsg ->
             updateSchedulePage schedulePageMsg model
+
+        ForumPageMsg forumPageMsg ->
+            updateForumPage forumPageMsg model
 
         AuthMsg authMsg ->
           updateSignInPage authMsg model
@@ -153,6 +160,13 @@ updateSchedulePage msg model =
     in
         ( { model | schedulePageModel = schedulePageModel }, schedulePageCmd |> Cmd.map SchedulePageMsg )
 
+updateForumPage : Pages.Forum.Msg -> Model -> ( Model, Cmd Msg )
+updateForumPage msg model =
+    let
+        ( forumPageModel, forumPageCmd ) =
+            Pages.Forum.update msg model.forumPageModel
+    in
+        ( { model | forumPageModel = forumPageModel }, forumPageCmd |> Cmd.map ForumPageMsg )
 
 view : Model -> Html Msg
 view model =
@@ -191,6 +205,9 @@ page model =
 
             ScheduleRoute ->
                 Html.map SchedulePageMsg (Pages.Schedule.view model.schedulePageModel model.authModel)
+
+            ForumRoute ->
+                Html.map ForumPageMsg (Pages.Forum.view model.forumPageModel model.authModel)
 
             NotFoundRoute ->
                   div [ class "container text-center" ]

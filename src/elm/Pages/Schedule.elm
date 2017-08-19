@@ -8,6 +8,7 @@ import Css
 import Html.CssHelpers
 import MainCss
 import FontAwesome.Web as Icon
+import Bootstrap.Card as Card
 
 import Auth
 
@@ -130,18 +131,23 @@ view model authModel =
 
 viewPrivileged : Model -> Html Msg
 viewPrivileged model =
-  div [ class "container" ]
-    [ iframe
-      [ src "https://calendar.google.com/calendar/embed?src=4sl4aopkrgcftcs6qg90fa06lc%40group.calendar.google.com&ctz=America/New_York"
-      , style
-        [ ("border","0")
-        , ("width", "100%")
-        , ("height", "600px")
+  div [ class "container text-center" ]
+    [ Card.config [ Card.info, Card.attrs [] ]
+      |> Card.block []
+        [ Card.text []
+          [ iframe
+            [ src "https://calendar.google.com/calendar/embed?src=4sl4aopkrgcftcs6qg90fa06lc%40group.calendar.google.com&ctz=America/New_York"
+            , style
+              [ ("border","0")
+              , ("width", "100%")
+              , ("height", "600px")
+              ]
+            ]
+            []
+          ]
         ]
-      ]
-      []
+      |> Card.view
     ]
-
 
 viewUnprivileged : Model -> Html Msg
 viewUnprivileged model =
