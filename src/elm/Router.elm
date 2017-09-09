@@ -192,7 +192,7 @@ page model =
                 Html.map HomePageMsg (Pages.Home.view model.homePageModel)
 
             ResultsRoute ->
-                Html.map ResultsPageMsg (Pages.Results.view model.resultsPageModel)
+                Html.map ResultsPageMsg (Pages.Results.view model.resultsPageModel model.authModel)
 
             CourseMapRoute ->
                 Html.map CourseMapPageMsg (Pages.CourseMap.view model.courseMapPageModel)

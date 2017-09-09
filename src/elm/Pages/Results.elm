@@ -9,6 +9,7 @@ import Html.CssHelpers
 import MainCss
 import List exposing (..)
 
+import Auth
 
 type Msg
     = None
@@ -44,7 +45,18 @@ type alias ResultSet =
 rs2017 : ResultSet
 rs2017 =
   { name = "2017"
-  , results = []
+  , results =
+    [ { date = "Sept. 7 2017"
+      , location = "Maynard"
+      , locationLink = "/#/coursemap"
+      , girlsPlace = "2nd"
+      , girlsPoints = "36"
+      , girlsResults = "static/img/results/2017/20170907GIRLS-Littleton.pdf"
+      , boysPlace = "2nd"
+      , boysPoints = "30"
+      , boysResults = "static/img/results/2017/20170907BOYS-Littleton.pdf"
+      }
+    ]
   }
 
 rs2016 : ResultSet
@@ -137,8 +149,8 @@ rs2016 =
 
 results : List ResultSet
 results =
-  -- [ rs2017
-  [ rs2016
+  [ rs2017
+  , rs2016
   ]
 
 
@@ -147,12 +159,17 @@ update msg model =
     ( { }, Cmd.none )
 
 
-view : Model -> Html Msg
-view model =
-  div [] (List.map viewResultSet results)
+view : Model -> Auth.Model -> Html Msg
+view model authModel =
+  let
+    isAuthorized = Auth.isAuthorized authModel.calendar
+  in
+    div [] (List.map (viewResultSet isAuthorized) results)
+          --  (List.map (elementView address) model.gifList)
 
-viewResultSet : ResultSet -> Html Msg
-viewResultSet rs =
+
+viewResultSet : Bool -> ResultSet -> Html Msg
+viewResultSet isAuthorized rs =
   div [ class "container" ]
     [ table [ class "table table-hover" ]
       [ thead []
@@ -169,22 +186,24 @@ viewResultSet rs =
           , th [] [ text "Boys" ]
           ]
         ]
-      , tbody [] (List.map viewResults rs.results)
+      , tbody [] (List.map (viewResults isAuthorized) rs.results)
       ]
     ]
 
-viewResults : Results -> Html Msg
-viewResults result =
+viewResults : Bool -> Results -> Html Msg
+viewResults isAuthorized result =
   tr []
     [ td [] [ text result.date ]
     , td [] [ (viewLocation result.location result.locationLink) ]
-    , td [] (resultsValue result.girlsResults result.girlsPlace)
-    , td [] (resultsValue result.boysResults result.boysPlace)
+    , td [] (resultsValue result.girlsResults result.girlsPlace isAuthorized)
+    , td [] (resultsValue result.boysResults result.boysPlace isAuthorized)
     ]
 
-resultsValue : String -> String -> List (Html Msg)
-resultsValue l r =
-  [ a [ href l ] [ text r ] ]
+resultsValue : String -> String -> Bool -> List (Html Msg)
+resultsValue l r isAuthorized =
+  case isAuthorized of
+    True -> [ a [ href l ] [ text r ] ]
+    False -> [ text r ]
 
 viewLocation location locationLink =
   case locationLink of
