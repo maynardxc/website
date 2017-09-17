@@ -46,7 +46,17 @@ rs2017 : ResultSet
 rs2017 =
   { name = "2017"
   , results =
-    [ { date = "Sept. 7 2017"
+    [ { date = "Sept. 14 2017"
+      , location = "Quabbin (+Bromfield)"
+      , locationLink = ""
+      , girlsPlace = "1st, 1st"
+      , girlsPoints = "?, ?"
+      , girlsResults = "static/img/results/2017/20170916GIRLS-Bromfield-Quabbin.jpg"
+      , boysPlace = "2nd, 2nd"
+      , boysPoints = "?, ?"
+      , boysResults = "static/img/results/2017/20170916BOYS-Bromfield-Quabbin.jpg"
+      }
+    , { date = "Sept. 7 2017"
       , location = "Maynard"
       , locationLink = "/#/coursemap"
       , girlsPlace = "2nd"
@@ -56,6 +66,7 @@ rs2017 =
       , boysPoints = "30"
       , boysResults = "static/img/results/2017/20170907BOYS-Littleton.pdf"
       }
+
     ]
   }
 
