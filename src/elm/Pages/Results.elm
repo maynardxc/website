@@ -46,7 +46,17 @@ rs2017 : ResultSet
 rs2017 =
   { name = "2017"
   , results =
-    [ { date = "Sept. 14 2017"
+    [ { date = "Sept. 18 2017"
+      , location = "Sizer"
+      , locationLink = ""
+      , girlsPlace = "1st"
+      , girlsPoints = "?, ?"
+      , girlsResults = "static/img/results/2017/20170918GIRLS-Sizer.jpg"
+      , boysPlace = "2nd"
+      , boysPoints = "?, ?"
+      , boysResults = "static/img/results/2017/20170918BOYS-Sizer.jpg"
+      }
+    , { date = "Sept. 14 2017"
       , location = "Quabbin (+Bromfield)"
       , locationLink = ""
       , girlsPlace = "1st, 1st"
