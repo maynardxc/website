@@ -46,15 +46,25 @@ rs2017 : ResultSet
 rs2017 =
   { name = "2017"
   , results =
-    [ { date = "Sept. 25 2017"
+    [ { date = "Oct. 5 2017"
       , location = "Maynard"
       , locationLink = ""
       , girlsPlace = "1st"
       , girlsPoints = "?, ?"
-      , girlsResults = [ "static/img/results/2017/20170925GIRLS-Hudson.jpg" ]
+      , girlsResults = [ "static/img/results/2017/20171005GIRLS-Clinton.jpg" ]
+      , boysPlace = "1nd"
+      , boysPoints = "?, ?"
+      , boysResults = [ "static/img/results/2017/20171005BOYS-Clinton.jpg" ]
+      }
+    , { date = "Sept. 25 2017"
+      , location = "Maynard"
+      , locationLink = ""
+      , girlsPlace = "1st"
+      , girlsPoints = "?, ?"
+      , girlsResults = [ "static/img/results/2017/20170925GIRLS_Hudson.jpg" ]
       , boysPlace = "2nd"
       , boysPoints = "?, ?"
-      , boysResults = [ "static/img/results/2017/20170925BOYS-Hudson.jpg" ]
+      , boysResults = [ "static/img/results/2017/20170925BOYS_Hudson.jpg" ]
       }
     , { date = "Sept. 21 2017"
       , location = "Tahanto"
