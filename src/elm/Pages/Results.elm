@@ -46,13 +46,23 @@ rs2017 : ResultSet
 rs2017 =
   { name = "2017"
   , results =
-    [ { date = "Oct. 5 2017"
+    [ { date = "Oct. 12 2017"
+      , location = "Ayer (+SLA)"
+      , locationLink = ""
+      , girlsPlace = "1st, 1st"
+      , girlsPoints = "?, ?"
+      , girlsResults = [ "static/img/results/2017/20171012GIRLS-Ayer.jpg" ]
+      , boysPlace = "2nd, 1st"
+      , boysPoints = "?, ?"
+      , boysResults = [ "static/img/results/2017/20171012BOYS-Ayer.jpg" ]
+      }
+    , { date = "Oct. 5 2017"
       , location = "Maynard"
       , locationLink = ""
       , girlsPlace = "1st"
       , girlsPoints = "?, ?"
       , girlsResults = [ "static/img/results/2017/20171005GIRLS-Clinton.jpg" ]
-      , boysPlace = "1nd"
+      , boysPlace = "1st"
       , boysPoints = "?, ?"
       , boysResults = [ "static/img/results/2017/20171005BOYS-Clinton.jpg" ]
       }
