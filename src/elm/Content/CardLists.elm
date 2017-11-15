@@ -6,8 +6,6 @@ import Html.Attributes exposing (..)
 import Bootstrap.Card as Card
 
 import Content.CrossCountryIs
-import Content.SummerTraining
-import Content.SummerRunningOpportunities
 import Content.TeamPhoto
 import Content.MaynardStartsNewXCTeam
 import Content.MxcAtShirley
@@ -15,12 +13,20 @@ import Content.MaynardGirlsRunStrong
 import Content.MaynardGirlsRunPastMurdock
 import Content.MaynardHoldFirstMeet
 import Content.TigerInTheCat
+import Content.BannerPhoto
+import Content.DistrictAwardsPhoto
+import Content.DistrictPhoto
+import Content.NewsDistricts2017
+import Content.NewsLeague2017
 
 cards =
   [ Card.columns
-    [ Content.SummerRunningOpportunities.card
+    [ Content.BannerPhoto.card
+    , Content.NewsDistricts2017.card
+    , Content.NewsLeague2017.card
+    , Content.DistrictAwardsPhoto.card
     , Content.TigerInTheCat.card
-    , Content.SummerTraining.card
+    , Content.DistrictPhoto.card
     , Content.MxcAtShirley.card
     , Content.MaynardGirlsRunStrong.card
     , Content.MaynardGirlsRunPastMurdock.card
