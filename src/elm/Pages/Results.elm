@@ -46,7 +46,27 @@ rs2017 : ResultSet
 rs2017 =
   { name = "2017"
   , results =
-    [ { date = "Oct. 19 2017"
+    [ { date = "Nov. 11 2017"
+      , location = "District Meet (Gardner Golf Course)"
+      , locationLink = ""
+      , girlsPlace = "4th"
+      , girlsPoints = "?, ?"
+      , girlsResults = [ "http://www.coolrunning.com/results/17/ma/Nov11_MIAACe_set2.shtml" ]
+      , boysPlace = "26th"
+      , boysPoints = "?, ?"
+      , boysResults = [ "http://www.coolrunning.com/results/17/ma/Nov11_MIAACe_set4.shtml" ]
+      }
+    , { date = "Oct. 28 2017"
+      , location = "Hollis Hill Farm"
+      , locationLink = ""
+      , girlsPlace = "2nd"
+      , girlsPoints = "?, ?"
+      , girlsResults = [ "http://www.coolrunning.com/results/17/ma/Oct28_Midlan_set1.shtml" ]
+      , boysPlace = "4th"
+      , boysPoints = "?, ?"
+      , boysResults = [ "http://www.coolrunning.com/results/17/ma/Oct28_Midlan_set2.shtml" ]
+      }
+    , { date = "Oct. 19 2017"
       , location = "Maynard"
       , locationLink = ""
       , girlsPlace = "1st"
